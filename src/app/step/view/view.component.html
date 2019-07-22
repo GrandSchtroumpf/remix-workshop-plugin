@@ -1,0 +1,3 @@
+<ng-container *ngIf="step$ | async as step">
+  <markdown [data]="step.markdown"></markdown>
+</ng-container>

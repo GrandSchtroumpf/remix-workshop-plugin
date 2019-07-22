@@ -1,0 +1,9 @@
+<account-toolbar>
+  <a routerLink="/workshops/list">Back</a>
+</account-toolbar>
+
+<section *ngIf="workshop$ | async as workshop">
+  <h1>{{ workshop.name }}</h1>
+  <p>{{ workshop.description }}</p>
+  <button class="btn" (click)="start()">Start</button>
+</section>

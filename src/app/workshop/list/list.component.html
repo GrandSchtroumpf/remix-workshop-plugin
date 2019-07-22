@@ -1,0 +1,14 @@
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let workshop of workshops$ | async">
+    <h3>{{ workshop.name }}</h3>
+    <p>{{ workshop.description }}</p>
+    <a [routerLink]="['../', workshop.id]" class="list-group-item">View</a>
+    <ng-container *ngIf="isOwner(workshop)">
+      <a [routerLink]="['../', workshop.id, 'edit']" class="list-group-item">Edit</a>
+    </ng-container>
+  </li>
+</ul>
+
+<account-toolbar>
+  <a routerLink="../create">Create a Workshop</a>
+</account-toolbar>

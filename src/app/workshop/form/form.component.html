@@ -1,0 +1,37 @@
+<form [formGroup]="form" (submit)="update.emit(form.value)">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="name" aria-label="Username" formControlName="name">
+  </div>
+  <div class="input-group">
+    <textarea type="text" class="form-control" placeholder="description" aria-label="Description"
+      formControlName="description">
+      </textarea>
+  </div>
+  <!-- Steps -->
+  <ngb-accordion #acc="ngbAccordion" formArrayName="steps">
+    <ngb-panel *ngFor="let step of form.steps.controls; let i = index">
+      <ng-template ngbPanelTitle>
+        <span>Step {{ i }}</span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <form [formGroup]="step">
+          <div class="input-group">
+            <input formControlName="markdown" class="form-control" placeholder="link for Markdown">
+          </div>
+          <div class="input-group">
+            <input formControlName="solidity" class="form-control" placeholder="link for Solidity">
+          </div>
+          <div class="input-group">
+            <input formControlName="test" class="form-control" placeholder="link for Test">
+          </div>
+        </form>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+  <button type="button" class="btn" (click)="form.addStep()">Create new Step</button>
+  <button type="submit" class="btn">Save</button>
+</form>
+
+<account-toolbar>
+  <a routerLink="../list">Back</a>
+</account-toolbar>
