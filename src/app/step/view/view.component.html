@@ -1,3 +1,10 @@
 <ng-container *ngIf="step$ | async as step">
+  <header>
+    <a class="btn" routerLink="../..">List</a>
+    <span>{{ step.name }}</span>
+  </header>
   <markdown [data]="step.markdown"></markdown>
+  <footer>
+    <a class="btn" (click)="next()">Next</a>
+  </footer>
 </ng-container>

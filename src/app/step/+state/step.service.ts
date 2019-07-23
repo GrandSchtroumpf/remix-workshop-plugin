@@ -1,26 +1,32 @@
 import { Injectable, Inject } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ID } from '@datorama/akita';
 import { StepStore } from './step.store';
 import { Step } from './step.model';
-import { WorkshopStep } from 'src/app/workshop/+state';
-import { combineLatest } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { REMIX } from 'src/app/remix-client';
 
 @Injectable({ providedIn: 'root' })
 export class StepService {
 
-  constructor(@Inject(REMIX) private remix, private store: StepStore) {}
+  constructor(
+    @Inject(REMIX) private remix,
+    private store: StepStore,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  async get(index: number, step: WorkshopStep) {
-    const file = await this.remix.call('fileManager', 'getFile', 'browser/ballot.sol');
-    console.log({file});
+  async get(index: number, step: Step) {
     return Promise.all([
       this.remix.call('contentImport', 'resolve', step.markdown),
       this.remix.call('contentImport', 'resolve', step.solidity),
       this.remix.call('contentImport', 'resolve', step.test),
     ]).then(([markdown, solidity, test]) => {
-      this.update(index, { markdown, solidity, test });
+      this.store.upsert(index, {
+        ...step,
+        markdown: markdown.content,
+        solidity: solidity.content,
+        test: test.content
+      });
     });
   }
 

@@ -1,13 +1,15 @@
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
-import { WorkshopStep, Workshop, createWorkshop, createWorkshopStep } from './+state';
+import { Workshop, createWorkshop, createStep } from './+state';
+import { Step } from '../step/+state';
 
 
 ////////////
 /// STEP ///
 ////////////
 
-function createStepControls(step: Partial<WorkshopStep>) {
+function createStepControls(step: Partial<Step>) {
   return {
+    name: new FormControl(step.name),
     markdown: new FormControl(step.markdown),
     solidity: new FormControl(step.solidity),
     test: new FormControl(step.test),
@@ -15,8 +17,8 @@ function createStepControls(step: Partial<WorkshopStep>) {
 }
 
 export class StepForm extends FormGroup {
-  constructor(step: Partial<WorkshopStep> = {}) {
-    const defaultStep = createWorkshopStep(step);
+  constructor(step: Partial<Step> = {}) {
+    const defaultStep = createStep(step);
     const control = createStepControls(defaultStep);
     super(control);
   }
@@ -48,7 +50,7 @@ export class WorkshopForm extends FormGroup {
     return this.get('steps') as FormArray;
   }
 
-  addStep(step: Partial<WorkshopStep> = {}) {
+  addStep(step: Partial<Step> = {}) {
     const control = new StepForm(step);
     this.steps.push(control);
   }

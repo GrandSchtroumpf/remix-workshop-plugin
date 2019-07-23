@@ -1,4 +1,5 @@
 export interface Step {
+  name: string;
   markdown: string;
   solidity: string;
   test: string;
@@ -9,7 +10,7 @@ export interface Step {
  */
 export function createStep(params: Partial<Step> = {}) {
   return {
-    description: '',
+    name: '',
     markdown: '',
     solidity: '',
     test: '',

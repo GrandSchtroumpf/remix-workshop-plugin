@@ -5,5 +5,5 @@
 <section *ngIf="workshop$ | async as workshop">
   <h1>{{ workshop.name }}</h1>
   <p>{{ workshop.description }}</p>
-  <button class="btn" (click)="start()">Start</button>
+  <a class="btn" (click)="start()">Start</a>
 </section>

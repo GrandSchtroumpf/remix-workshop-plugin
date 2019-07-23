@@ -1,15 +1,11 @@
-export interface WorkshopStep {
-  markdown: string;
-  solidity: string;
-  test: string;
-}
+import { Step } from 'src/app/step/+state';
 
 export interface Workshop {
   id: string;
   name: string;
   description: string;
   author: string;
-  steps: WorkshopStep[];
+  steps: Step[];
 }
 
 export interface Metadata {
@@ -70,11 +66,11 @@ export function createWorkshop(params: Partial<Workshop> = {}) {
   } as Workshop;
 }
 
-export function createWorkshopStep(params: Partial<WorkshopStep> = {}) {
+export function createStep(params: Partial<Step> = {}) {
   return {
     markdown: '',
     solidity: '',
     test: '',
     ...params
-  } as WorkshopStep;
+  } as Step;
 }

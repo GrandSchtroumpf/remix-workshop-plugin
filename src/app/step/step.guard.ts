@@ -11,17 +11,14 @@ export class StepGuard implements CanActivate {
   constructor(
     private service: StepService,
     private store: StepStore,
-    private query: StepQuery,
     private workshopQuery: WorkshopQuery,
   ) {}
 
   async canActivate(next: ActivatedRouteSnapshot) {
     const { stepId } = next.params;
     const step = this.workshopQuery.getActive().steps[stepId];
-    this.store.setActive(stepId);
-    if (this.query.getEntity(next.params.stepId)) {
-      return true;
-    }
-    this.service.get(stepId, step);
+    this.store.setActive(parseInt(stepId, 10));
+    await this.service.get(stepId, step);
+    return true;
   }
 }

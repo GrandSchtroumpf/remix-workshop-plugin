@@ -1,4 +1,15 @@
 :host {
   height: 100%;
   display: block;
+  overflow: hidden;
+}
+
+header, footer {
+  height: 60px;
+}
+
+markdown {
+  display: block;
+  height: calc(100% - 120px);
+  overflow: auto;
 }

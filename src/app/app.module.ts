@@ -28,7 +28,6 @@ import { environment } from '../environments/environment';
       ? AkitaNgRouterStoreModule.forRoot()
       : [ AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule.forRoot() ]
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import { Component, Input, Inject } from '@angular/core';
-import { WorkshopStep } from 'src/app/workshop/+state';
+import { Step } from 'src/app/step/+state';
 import { REMIX } from 'src/app/remix-client';
 import { PluginClient } from '@remixproject/plugin';
 
@@ -13,11 +13,11 @@ export class StepListComponent {
   stepIndex = 0;
   started = false;  // Create a state
 
-  @Input() steps: WorkshopStep[];
+  @Input() steps: Step[];
 
   constructor(@Inject(REMIX) private remix: PluginClient) { }
 
-  // async start(step: WorkshopStep) {
+  // async start(step: Step) {
   //   const filename = `browser/${step.id}.sol`;
   //   await this.remix.call('fileManager', 'setFile', filename, step.solidity);
   //   await this.remix.call('fileManager', 'switchFile', filename);
