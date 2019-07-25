@@ -6,6 +6,13 @@
 
 ul {
   flex: 1;
+  padding: 20px;
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 }
 
 footer {

@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Workshop, WorkshopQuery } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
-
+import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'workshop-list',
   templateUrl: './list.component.html',
@@ -11,6 +11,8 @@ import { AccountQuery } from 'src/app/account/+state';
 })
 export class WorkshopListComponent implements OnInit {
 
+  faEdit = faEdit;
+  faEye = faEye;
   workshops$: Observable<Workshop[]>;
 
   constructor(private query: WorkshopQuery, private accountQuery: AccountQuery) { }

@@ -2,10 +2,16 @@
   <li class="list-group-item" *ngFor="let workshop of workshops$ | async">
     <h3>{{ workshop.name }}</h3>
     <p>{{ workshop.description }}</p>
-    <a [routerLink]="['../', workshop.id]" class="list-group-item">View</a>
-    <ng-container *ngIf="isOwner(workshop)">
-      <a [routerLink]="['../', workshop.id, 'edit']" class="list-group-item">Edit</a>
-    </ng-container>
+    <div class="actions">
+      <a [routerLink]="['../', workshop.id]" class="btn">
+        <fa-icon [icon]="faEye"></fa-icon>
+      </a>
+      <ng-container *ngIf="isOwner(workshop)">
+        <a [routerLink]="['../', workshop.id, 'edit']" class="btn">
+          <fa-icon [icon]="faEdit"></fa-icon>
+        </a>
+      </ng-container>
+    </div>
   </li>
 </ul>
 

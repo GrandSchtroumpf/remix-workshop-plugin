@@ -1,9 +1,16 @@
 <account-toolbar>
-  <a routerLink="/workshops/list">Back</a>
+  <a class="btn" routerLink="/workshops/list" role="button">Back</a>
 </account-toolbar>
 
 <section *ngIf="workshop$ | async as workshop">
   <h1>{{ workshop.name }}</h1>
   <p>{{ workshop.description }}</p>
-  <a class="btn" (click)="start()">Start</a>
+  <article class="list-group">
+    <ng-container *ngFor="let step of workshop.steps; let i = index">
+      <a class="list-group-item list-group-item-action" [routerLink]="['../steps', i]" >
+        {{ i + 1 }} - {{ step.name }}
+      </a>
+    </ng-container>
+  </article>
+  <a class="btn btn-success" (click)="start()" role="button">Start</a>
 </section>

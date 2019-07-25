@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BootstrapModule } from '../bootstrap.module';
 import { AccountModule } from '../account/account.module';
 import { StartedWorkshopGuard, ActiveWorkshopGuard, EditWorkshopGuard } from './workshop.guard';
@@ -26,6 +27,7 @@ import { WorkshopCreateComponent } from './create/create.component';
     BootstrapModule,
     AccountModule,
     ReactiveFormsModule,
+    FontAwesomeModule,
     RouterModule.forChild([
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: WorkshopListComponent },

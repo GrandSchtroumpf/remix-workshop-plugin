@@ -8,5 +8,4 @@ export class StepQuery extends QueryEntity<StepState> {
   constructor(protected store: StepStore) {
     super(store);
   }
-
 }

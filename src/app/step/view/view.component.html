@@ -1,6 +1,8 @@
 <ng-container *ngIf="step$ | async as step">
   <header>
-    <a class="btn" routerLink="../..">List</a>
+    <a class="btn" routerLink="../..">
+      <fa-icon [icon]="faArrowUp"></fa-icon>
+    </a>
     <span>{{ step.name }}</span>
   </header>
   <markdown [data]="step.markdown"></markdown>
