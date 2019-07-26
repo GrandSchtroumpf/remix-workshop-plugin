@@ -17,12 +17,6 @@ export class StepListComponent {
 
   constructor(@Inject(REMIX) private remix: PluginClient) { }
 
-  // async start(step: Step) {
-  //   const filename = `browser/${step.id}.sol`;
-  //   await this.remix.call('fileManager', 'setFile', filename, step.solidity);
-  //   await this.remix.call('fileManager', 'switchFile', filename);
-  //   this.started = true;
-  // }
 
   next(max: number) {
     if (this.stepIndex === max - 1) {

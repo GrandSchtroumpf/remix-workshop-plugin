@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Step, StepQuery, StepService } from '../+state';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Step, StepQuery, StepService, StepStore } from '../+state';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { UnitTestError } from '@remixproject/plugin';
 
 @Component({
   selector: 'step-view',
@@ -15,9 +16,13 @@ export class StepViewComponent implements OnInit {
 
   faArrowUp = faArrowUp;
   step$: Observable<Step>;
+  success$: Observable<boolean>;
+  errors$: Observable<UnitTestError[]>;
+  isLoading$: Observable<boolean>;
 
   constructor(
     private service: StepService,
+    private store: StepStore,
     private query: StepQuery,
     private router: Router,
     private route: ActivatedRoute
@@ -25,8 +30,16 @@ export class StepViewComponent implements OnInit {
 
   ngOnInit() {
     this.step$ = this.query.selectActive().pipe(
+      tap(_ => this.store.update({ success: false, error: null })),
       tap(step => this.service.displaySolidity(step))
     );
+    this.success$ = this.query.select('success');
+    this.errors$ = this.query.selectError<UnitTestError[]>();
+    this.isLoading$ = this.query.selectLoading();
+  }
+
+  test(step: Step) {
+    this.service.testStep(step);
   }
 
   next() {

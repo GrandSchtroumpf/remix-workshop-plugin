@@ -9,6 +9,7 @@ import { StepGuard } from './step.guard';
 
 import { StepViewComponent } from './view/view.component';
 import { StepListComponent } from './list/list.component';
+import { BootstrapModule } from '../bootstrap.module';
 
 @NgModule({
   declarations: [StepViewComponent, StepListComponent],
@@ -16,6 +17,7 @@ import { StepListComponent } from './list/list.component';
     CommonModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    BootstrapModule,
     MarkdownModule.forRoot(),
     RouterModule.forChild([
       { path: '', redirectTo: 'list', pathMatch: 'full' },

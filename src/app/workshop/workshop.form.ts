@@ -10,6 +10,7 @@ import { Step } from '../step/+state';
 function createStepControls(step: Partial<Step>) {
   return {
     name: new FormControl(step.name),
+    fileName: new FormControl(step.fileName),
     markdown: new FormControl(step.markdown),
     solidity: new FormControl(step.solidity),
     test: new FormControl(step.test),

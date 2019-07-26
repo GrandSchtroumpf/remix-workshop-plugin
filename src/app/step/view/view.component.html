@@ -5,8 +5,30 @@
     </a>
     <span>{{ step.name }}</span>
   </header>
+
   <markdown [data]="step.markdown"></markdown>
+
   <footer>
-    <a class="btn" (click)="next()">Next</a>
+    <ng-container *ngIf="!(isLoading$ | async); else loading">
+      <button class="btn badged" (click)="test(step)">
+        Test
+      </button>
+      <ng-container *ngIf="success$ | async">
+        <a class="btn btn-success" (click)="next()">Next</a>
+      </ng-container>
+      <ng-container *ngIf="errors$ | async as errors">
+        <span [ngbPopover]="popContent" class="btn btn-danger">
+          {{ errors.length }} Errors
+        </span>
+        <ng-template #popContent>
+          <ul class="list-group">
+            <li *ngFor="let error of errors"  class="list-group-item">{{ error.message }}</li>
+          </ul>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+    <ng-template #loading>
+      <span>drum roll ....</span>
+    </ng-template>
   </footer>
 </ng-container>
