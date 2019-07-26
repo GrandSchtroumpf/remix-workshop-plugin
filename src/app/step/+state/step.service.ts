@@ -58,14 +58,16 @@ export class StepService {
       const path = getFilePath(step, 'test');
       await this.remix.call('fileManager', 'setFile', path, step.test);
       const result = await this.remix.call('solidityUnitTesting', 'testFromPath', path);
-      // const result = await this.remix.call('solidityUnitTesting', 'testFromSource', step.test);
-      console.log(result);
-      result.totalFailing === 0
-        ? this.store.update({ success: true })
-        : this.store.setError(result.errors);
-      this.store.setLoading(false);
+      this.store.update({
+        success: result.totalFailing === 0,
+        error: result.totalFailing === 0 ? null : result.errors,
+        loading: false
+      });
     } catch (err) {
-      this.store.setLoading(false);
+      this.store.update({
+        error: [{ message: err }],
+        loading: false
+      });
       console.log(err);
     }
   }
