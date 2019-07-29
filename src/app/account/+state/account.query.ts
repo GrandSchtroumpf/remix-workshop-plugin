@@ -14,8 +14,14 @@ export class AccountQuery extends Query<AccountState> {
   public currentStep$ = this.select('currentStep');
 
   public getStepIndex(workshopId: string): number {
-    const stepIndex = this.getValue().currentStep[workshopId];
-    return stepIndex > -1 ? stepIndex : -1;
+    if (!this.getValue().workshops[workshopId]) {
+      return -1;
+    }
+    return this.getValue().workshops[workshopId].length - 1;
+  }
+
+  public getStepContent(workshopId: string, index: number): string {
+    return this.getValue().workshops[workshopId][index];
   }
 
   public hasStatedWorkshop(workshopId: string): boolean {

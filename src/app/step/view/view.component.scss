@@ -1,16 +1,22 @@
-:host {
+step-view {
   height: 100%;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
 }
 
 header, footer {
-  height: 60px;
+  padding: 10px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
 
 markdown {
   display: block;
-  height: calc(100% - 120px);
+  flex: 1;
   overflow: auto;
   padding: 5px;
 
@@ -31,8 +37,7 @@ markdown {
   }
 }
 
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+footer .test {
+  padding-left: 25px;
+  padding-right: 25px;
 }

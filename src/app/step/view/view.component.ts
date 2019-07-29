@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Step, StepQuery, StepService, StepStore } from '../+state';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { UnitTestError } from '@remixproject/plugin';
 
 @Component({
@@ -14,11 +14,12 @@ import { UnitTestError } from '@remixproject/plugin';
 })
 export class StepViewComponent implements OnInit {
 
-  faArrowUp = faArrowUp;
+  menuIcon = faBars;
   step$: Observable<Step>;
   success$: Observable<boolean>;
   errors$: Observable<UnitTestError[]>;
   isLoading$: Observable<boolean>;
+  index$: Observable<number>;
 
   constructor(
     private service: StepService,
@@ -36,10 +37,18 @@ export class StepViewComponent implements OnInit {
     this.success$ = this.query.select('success');
     this.errors$ = this.query.selectError<UnitTestError[]>();
     this.isLoading$ = this.query.selectLoading();
+    this.index$ = this.query.selectActiveId();
   }
 
   test(step: Step) {
     this.service.testStep(step);
+  }
+
+  previous() {
+    const current = this.query.getActiveId();
+    if (current !== 0) {
+      this.router.navigate(['..', current - 1], { relativeTo: this.route });
+    }
   }
 
   next() {

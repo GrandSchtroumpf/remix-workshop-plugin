@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
-import { StepService, StepQuery, StepStore } from './+state';
+import { StepService, StepStore } from './+state';
+import { AccountQuery } from '../account/+state';
 import { WorkshopQuery } from '../workshop/+state';
 
 @Injectable({
@@ -11,14 +12,22 @@ export class StepGuard implements CanActivate {
   constructor(
     private service: StepService,
     private store: StepStore,
+    private accountQuery: AccountQuery,
     private workshopQuery: WorkshopQuery,
   ) {}
 
   async canActivate(next: ActivatedRouteSnapshot) {
     const { stepId } = next.params;
-    const step = this.workshopQuery.getActive().steps[stepId];
-    this.store.setActive(parseInt(stepId, 10));
-    await this.service.get(stepId, step);
-    return true;
+    const index = parseInt(stepId, 10);
+    const workshop = this.workshopQuery.getActive();
+    const currentStep = this.accountQuery.getStepIndex(workshop.id);
+    if (index > currentStep) {
+      return false;
+    } else {
+      const step = workshop.steps[stepId];
+      this.store.setActive(index);
+      await this.service.get(stepId, step);
+      return true;
+    }
   }
 }

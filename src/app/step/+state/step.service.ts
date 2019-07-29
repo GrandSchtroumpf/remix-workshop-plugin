@@ -4,6 +4,8 @@ import { StepStore } from './step.store';
 import { Step } from './step.model';
 import { REMIX } from 'src/app/remix-client';
 import { PluginClient } from '@remixproject/plugin';
+import { AccountQuery, AccountService } from 'src/app/account/+state';
+import { WorkshopQuery } from 'src/app/workshop/+state';
 
 /** Create the path for the file manager based on a step */
 function getFilePath(step: Step, type: 'test' | 'solidity'): string {
@@ -27,6 +29,9 @@ export class StepService {
 
   constructor(
     @Inject(REMIX) private remix: PluginClient,
+    private accountQuery: AccountQuery,
+    private accountService: AccountService,
+    private workshopQuery: WorkshopQuery,
     private store: StepStore
   ) {}
 
@@ -46,23 +51,40 @@ export class StepService {
   }
 
   async displaySolidity(step: Step) {
+    const workshopId = this.workshopQuery.getActiveId();
+    const stepIndex = this.store._value().active;
+    // Get content from account or step
+    const content = this.accountQuery.getStepContent(workshopId, stepIndex) || step.solidity;
     const path = getFilePath(step, 'solidity');
-    await this.remix.call('fileManager', 'setFile', path, step.solidity);
+    await this.remix.call('fileManager', 'setFile', path, content);
     await this.remix.call('fileManager', 'switchFile', path);
   }
 
   async testStep(step: Step) {
     try {
-      this.store.update({ success: false });
-      this.store.setLoading(true);
+      // Update store before running tests
+      this.store.update({ loading: true, success: false });
+
+      // Run tests
       const path = getFilePath(step, 'test');
       await this.remix.call('fileManager', 'setFile', path, step.test);
       const result = await this.remix.call('solidityUnitTesting', 'testFromPath', path);
+
+      // Update the account with the latest version of the code
+      const workshopId = this.workshopQuery.getActiveId();
+      const stepIndex = this.store._value().active;
+      const content = await this.remix.call('fileManager', 'getFile', getFilePath(step, 'solidity'));
+      this.accountService.updateWorkshop(workshopId, stepIndex, content);
+
+      // Update store after tests have run
       this.store.update({
         success: result.totalFailing === 0,
         error: result.totalFailing === 0 ? null : result.errors,
         loading: false
       });
+
+      // Update the account
+      this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
     } catch (err) {
       this.store.update({
         error: [{ message: err }],

@@ -18,6 +18,11 @@ export class AccountService {
   }
 
   startWorkshop(workshopId: string) {
-    this.store.updateCurrentStep(workshopId, 0);
+    this.store.updateWorkshop(workshopId, 0, '');
+    // this.store.updateCurrentStep(workshopId, {index: 0, content: ''});
+  }
+
+  updateWorkshop(workshopId: string, index: number, content: string) {
+    this.store.updateWorkshop(workshopId, index, content);
   }
 }
