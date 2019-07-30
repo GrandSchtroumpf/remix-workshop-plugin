@@ -4,11 +4,12 @@ import { Workshop, WorkshopQuery } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
 import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { slideInY } from '../../animations';
-import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
+import { trigger, transition, query as queryChild, stagger, style } from '@angular/animations';
+import { tap } from 'rxjs/operators';
 
 const slideIn = trigger('slideIn', [
   transition(':enter', [
-    queryChild('li', [stagger(30, slideInY)])
+    queryChild('li', [stagger(30, slideInY)], { optional: true })
   ])
 ]);
 
@@ -28,7 +29,13 @@ export class WorkshopListComponent implements OnInit {
   constructor(private query: WorkshopQuery, private accountQuery: AccountQuery) { }
 
   ngOnInit() {
-    this.workshops$ = this.query.selectAll();
+    this.workshops$ = this.query.selectAll().pipe(
+      tap(result => console.log({result}))
+    );
+  }
+
+  trackByFn(index: number, workshop: Workshop) {
+    return workshop.id;
   }
 
   isOwner(workshop: Workshop) {

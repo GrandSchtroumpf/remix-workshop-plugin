@@ -1,6 +1,6 @@
-<ng-container *ngIf="workshops$ | async as workshops; else loading">
+<ng-container *ngIf="workshops$ | async as workshops">
   <ul @slideIn class="list-group">
-    <li class="list-group-item" *ngFor="let workshop of workshops">
+    <li class="list-group-item" *ngFor="let workshop of workshops$ | async; trackBy: trackByFn">
       <h3>{{ workshop.name }}</h3>
       <p>{{ workshop.description }}</p>
       <div class="actions">
@@ -15,11 +15,8 @@
       </div>
     </li>
   </ul>
+  <account-toolbar>
+    <a routerLink="../create">Create a Workshop</a>
+  </account-toolbar>
 </ng-container>
-<ng-template #loading>
-  ...loading
-</ng-template>
 
-<account-toolbar>
-  <a routerLink="../create">Create a Workshop</a>
-</account-toolbar>

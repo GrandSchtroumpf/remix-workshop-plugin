@@ -2,10 +2,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
 }
 
 ul {
   flex: 1;
+  overflow: auto;
   padding: 20px;
 
   .actions {
