@@ -1,19 +1,24 @@
-<ul class="list-group">
-  <li class="list-group-item" *ngFor="let workshop of workshops$ | async">
-    <h3>{{ workshop.name }}</h3>
-    <p>{{ workshop.description }}</p>
-    <div class="actions">
-      <a [routerLink]="['../', workshop.id]" class="btn">
-        <fa-icon [icon]="faEye"></fa-icon>
-      </a>
-      <ng-container *ngIf="isOwner(workshop)">
-        <a [routerLink]="['../', workshop.id, 'edit']" class="btn">
-          <fa-icon [icon]="faEdit"></fa-icon>
+<ng-container *ngIf="workshops$ | async as workshops; else loading">
+  <ul @slideIn class="list-group">
+    <li class="list-group-item" *ngFor="let workshop of workshops">
+      <h3>{{ workshop.name }}</h3>
+      <p>{{ workshop.description }}</p>
+      <div class="actions">
+        <a [routerLink]="['../', workshop.id]" class="btn">
+          <fa-icon [icon]="faEye"></fa-icon>
         </a>
-      </ng-container>
-    </div>
-  </li>
-</ul>
+        <ng-container *ngIf="isOwner(workshop)">
+          <a [routerLink]="['../', workshop.id, 'edit']" class="btn">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </a>
+        </ng-container>
+      </div>
+    </li>
+  </ul>
+</ng-container>
+<ng-template #loading>
+  ...loading
+</ng-template>
 
 <account-toolbar>
   <a routerLink="../create">Create a Workshop</a>

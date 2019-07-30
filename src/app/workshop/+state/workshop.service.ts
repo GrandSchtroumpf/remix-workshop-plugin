@@ -12,30 +12,6 @@ export class WorkshopService {
     private store: WorkshopStore,
   ) {}
 
-  // private gist(id: string) {
-  //   return this.http.get<Gist>(`https://api.github.com/gists/${id}`);
-  // }
-
-  // getAll() {
-  //   const req = (id: string): Observable<Workshop> => {
-  //     return this.gist(id).pipe(
-  //       map((data: any) => ({id, ...data.files['metadata.json']})),
-  //       switchMap((metadataFile: any) => {
-  //         const metadata = JSON.parse(metadataFile.content);
-  //         const stepReqs = metadata.stepIds.map(stepId => {
-  //           return this.gist(stepId).pipe(map(data => gistToStep(data)));
-  //         });
-  //         return combineLatest(stepReqs).pipe(
-  //           map(steps => ({ ...metadata, steps, id } as Workshop))
-  //         );
-  //       })
-  //     );
-  //   };
-  //   return combineLatest(GIST.map(req)).pipe(
-  //     tap(workshops => this.store.add(workshops))
-  //   );
-  // }
-
   async get(id: string) {
     this.store.setActive(id);
     return true;  // to change with 3box

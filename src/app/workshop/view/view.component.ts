@@ -1,17 +1,27 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Workshop, WorkshopQuery } from '../+state';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AccountService, AccountQuery } from 'src/app/account/+state';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
+import { slideInY } from 'src/app/animations';
 
+const slideIn = trigger('slideIn', [
+  transition(':enter', [
+    queryChild('a', [stagger(30, slideInY)])
+  ])
+]);
 @Component({
   selector: 'workshop-view',
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [slideIn]
 })
 export class WorkshopViewComponent implements OnInit {
+  arrowIcon = faArrowLeft;
   workshop$: Observable<Workshop>;
   currentIndex$: Observable<number>;
 

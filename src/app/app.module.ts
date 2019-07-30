@@ -2,11 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { BootstrapModule } from './bootstrap.module';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
-import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
     BrowserModule,
     BootstrapModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'workshops', pathMatch: 'full' },
       {
@@ -25,8 +26,8 @@ import { environment } from '../environments/environment';
       },
     ]),
     environment.production
-      ? AkitaNgRouterStoreModule.forRoot()
-      : [ AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule.forRoot() ]
+      ? []
+      : [ AkitaNgDevtools.forRoot() ]
   ],
   bootstrap: [AppComponent]
 })

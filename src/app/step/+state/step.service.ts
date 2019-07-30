@@ -66,9 +66,7 @@ export class StepService {
       this.store.update({ loading: true, success: false });
 
       // Run tests
-      const path = getFilePath(step, 'test');
-      await this.remix.call('fileManager', 'setFile', path, step.test);
-      const result = await this.remix.call('solidityUnitTesting', 'testFromPath', path);
+      const result = await this.remix.call('solidityUnitTesting', 'testFromSource', step.test);
 
       // Update the account with the latest version of the code
       const workshopId = this.workshopQuery.getActiveId();

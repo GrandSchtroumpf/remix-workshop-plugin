@@ -3,11 +3,21 @@ import { Observable } from 'rxjs';
 import { Workshop, WorkshopQuery } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
 import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
+import { slideInY } from '../../animations';
+import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
+
+const slideIn = trigger('slideIn', [
+  transition(':enter', [
+    queryChild('li', [stagger(30, slideInY)])
+  ])
+]);
+
 @Component({
   selector: 'workshop-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [slideIn]
 })
 export class WorkshopListComponent implements OnInit {
 
