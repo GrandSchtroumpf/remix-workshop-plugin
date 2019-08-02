@@ -29,9 +29,7 @@ export class WorkshopListComponent implements OnInit {
   constructor(private query: WorkshopQuery, private accountQuery: AccountQuery) { }
 
   ngOnInit() {
-    this.workshops$ = this.query.selectAll().pipe(
-      tap(result => console.log({result}))
-    );
+    this.workshops$ = this.query.selectAll();
   }
 
   trackByFn(index: number, workshop: Workshop) {
