@@ -8,12 +8,10 @@ interface CurrentStep {
 
 export interface AccountState {
   address: string;
-  currentStep: {
-    [workshopId: string]: CurrentStep;
-  };
   workshops: {
     [workshopId: string]: string[];
   };
+  loading: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -34,9 +32,9 @@ export class AccountStore extends Store<AccountState> {
   }
 
   /** Update the current step of a workshop */
-  updateCurrentStep(workshopId: string, step: CurrentStep) {
-    this.update(state => ({
-      currentStep: { ...state.currentStep, [workshopId]: step }
-    }));
-  }
+  // updateCurrentStep(workshopId: string, step: CurrentStep) {
+  //   this.update(state => ({
+  //     currentStep: { ...state.currentStep, [workshopId]: step }
+  //   }));
+  // }
 }

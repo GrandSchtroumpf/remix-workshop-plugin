@@ -75,14 +75,14 @@ export class StepService {
       this.accountService.updateWorkshop(workshopId, stepIndex, content);
 
       // Update store after tests have run
-      this.store.update({
-        success: result.totalFailing === 0,
-        error: result.totalFailing === 0 ? null : result.errors,
-        loading: false
-      });
+      const success = result.totalFailing === 0;
+      const error = result.totalFailing === 0 ? null : result.errors;
+      this.store.update({ success, error, loading: false });
 
-      // Update the account
-      this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
+      // Update next step of the account if succeed
+      if (success) {
+        this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
+      }
     } catch (err) {
       this.store.update({
         error: [{ message: err }],
