@@ -13,6 +13,7 @@ import { WorkshopViewComponent } from './view/view.component';
 import { WorkshopFormComponent } from './form/form.component';
 import { WorkshopEditComponent } from './edit/edit.component';
 import { WorkshopCreateComponent } from './create/create.component';
+import { StepFormModule } from '../step/form/form.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { WorkshopCreateComponent } from './create/create.component';
   ],
   imports: [
     CommonModule,
+    StepFormModule,
     BootstrapModule,
     AccountModule,
     ReactiveFormsModule,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WorkshopQuery, Workshop, WorkshopService } from '../+state';
-import { Observable } from 'rxjs';
+import { WorkshopQuery, WorkshopService } from '../+state';
+import { WorkshopForm } from '../workshop.form';
 
 @Component({
   selector: 'workshop-edit',
@@ -9,8 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./edit.component.scss']
 })
 export class WorkshopEditComponent implements OnInit {
-
-  workshop$: Observable<Workshop>;
+  public form = new WorkshopForm();
 
   constructor(
     private query: WorkshopQuery,
@@ -19,10 +18,11 @@ export class WorkshopEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.workshop$ = this.query.selectActive();
+    this.form.patchValue(this.query.getActive());
   }
 
-  update(workshop: Workshop) {
+  update() {
+    const workshop = this.form.value;
     this.service.update(workshop);
     this.router.navigate(['/workshops/list']);
   }

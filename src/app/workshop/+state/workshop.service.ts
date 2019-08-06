@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, Inject } from '@angular/core';
 import { WorkshopStore } from './workshop.store';
 import { Workshop } from './workshop.model';
-import { guid } from '@datorama/akita';
+import { REMIX, RemixClient } from 'src/app/remix-client';
+import { AccountQuery, AccountStore } from 'src/app/account/+state';
 
 @Injectable({ providedIn: 'root' })
 export class WorkshopService {
 
   constructor(
-    private http: HttpClient,
+    @Inject(REMIX) private remix: RemixClient,
+    private accountQuery: AccountQuery,
+    private accountStore: AccountStore,
     private store: WorkshopStore,
   ) {}
 
@@ -21,10 +23,11 @@ export class WorkshopService {
     this.store.update(workshop.id, workshop);
   }
 
-  create(workshop: Workshop) {
-    if (!workshop.id) {
-      workshop.id = guid();
+  async create(workshop: Workshop) {
+    const templates = [ ...this.accountQuery.getValue().templates, workshop ];
+    if (this.accountQuery.isLoggedIn) {
+      await this.remix.box.setSpacePublicValue('templates', JSON.stringify(templates));
     }
-    return this.store.add(workshop);
+    return this.accountStore.update({ templates });
   }
 }

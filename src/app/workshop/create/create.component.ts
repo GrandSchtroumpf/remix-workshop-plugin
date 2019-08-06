@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AccountQuery } from 'src/app/account/+state';
 import { WorkshopService, Workshop } from '../+state';
 import { Router } from '@angular/router';
+import { WorkshopForm } from '../workshop.form';
 
 @Component({
   selector: 'workshop-create',
@@ -9,13 +10,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./create.component.scss']
 })
 export class WorkshopCreateComponent {
+  public form = new WorkshopForm();
+
   constructor(
     private service: WorkshopService,
     private accountQuery: AccountQuery,
     private router: Router
   ) {}
 
-  create(workshop: Workshop) {
+  create() {
+    const workshop = this.form.value;
     const author = this.accountQuery.getValue().address;
     this.service.create({ ...workshop, author });
     this.router.navigate(['/workshops/list']);
