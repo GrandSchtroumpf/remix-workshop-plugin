@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { AccountStore } from './account.store';
 import { AccountQuery } from './account.query';
 import { REMIX, RemixClient } from 'src/app/remix-client';
-import { timer } from 'rxjs';
+import { Workshop } from 'src/app/workshop/+state';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -13,29 +13,36 @@ export class AccountService {
     private query: AccountQuery,
   ) {
     this.remix.onload(async () => {
-      const address = await this.remix.box.getUserAddress();
-      this.store.update({ address });
-      if (address) {
+      const isLoggedIn = await this.remix.box.getUserAddress();
+      if (isLoggedIn) {
         await this.remix.box.openSpace();
-        const result = await this.remix.box.getSpacePrivateValue('workshops');
-        const workshops = JSON.parse(result || '{}');
-        this.store.update({ workshops });
+        const [address, workshops, templates] = await this.getStateFromBox();
+        this.store.update({ address, workshops, templates });
       }
     });
+  }
 
+  getStateFromBox(): Promise<[string, Record<string, string[]>, Workshop[]]> {
+    return Promise.all([
+      this.remix.box.getUserAddress(),
+      this.remix.box.getSpacePrivateValue('workshops'),
+      this.remix.box.getSpacePublicValue('templates'),
+    ]).then(([address, workshops, templates]) => [
+      address,
+      JSON.parse(workshops || '{}'),
+      JSON.parse(templates || '[]'),
+    ]);
   }
 
   async signin() {
     this.store.setLoading(true);
     await this.remix.box.login();
     await this.remix.box.openSpace();
-    const [address, workshops] = await Promise.all([
-      this.remix.box.getUserAddress(),
-      this.remix.box.getSpacePrivateValue('workshops')
-    ]);
+    const [address, workshops, templates] = await this.getStateFromBox();
     this.store.update({
       address,
-      workshops: JSON.parse(workshops || '{}'),
+      workshops,
+      templates,
       loading: false
     });
   }

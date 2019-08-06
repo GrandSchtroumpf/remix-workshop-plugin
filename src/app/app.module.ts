@@ -24,6 +24,10 @@ import { environment } from '../environments/environment';
         path: 'workshops',
         loadChildren: () => import('./workshop/workshop.module').then(m => m.WorkshopModule)
       },
+      {
+        path: 'account',
+        loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
+      }
     ]),
     environment.production
       ? []

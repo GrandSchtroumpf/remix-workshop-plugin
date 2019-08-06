@@ -1,43 +1,25 @@
-<form [formGroup]="form" (submit)="update.emit(form.value)">
+<form [formGroup]="control">
   <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="Username">Name</span>
+    </div>
     <input type="text" class="form-control" placeholder="name" aria-label="Username" formControlName="name">
   </div>
   <div class="input-group">
-    <textarea type="text" class="form-control" placeholder="description" aria-label="Description"
+    <textarea type="text" class="form-control" placeholder="Description" aria-label="Description"
       formControlName="description">
-      </textarea>
+    </textarea>
   </div>
   <!-- Steps -->
   <ngb-accordion #acc="ngbAccordion" formArrayName="steps">
-    <ngb-panel *ngFor="let step of form.steps.controls; let i = index">
+    <ngb-panel *ngFor="let step of control.steps.controls; let i = index">
       <ng-template ngbPanelTitle>
         <span>Step {{ i }}</span>
       </ng-template>
       <ng-template ngbPanelContent>
-        <form [formGroup]="step">
-          <div class="input-group">
-            <input formControlName="name" class="form-control" placeholder="Step name">
-          </div>
-          <div class="input-group">
-            <input formControlName="fileName" class="form-control" placeholder="File name">
-          </div>
-          <div class="input-group">
-            <input formControlName="markdown" class="form-control" placeholder="link for Markdown">
-          </div>
-          <div class="input-group">
-            <input formControlName="solidity" class="form-control" placeholder="link for Solidity">
-          </div>
-          <div class="input-group">
-            <input formControlName="test" class="form-control" placeholder="link for Test">
-          </div>
-        </form>
+        <step-form [formGroupName]="i"></step-form>
       </ng-template>
     </ngb-panel>
   </ngb-accordion>
-  <button type="button" class="btn" (click)="form.addStep()">Create new Step</button>
-  <button type="submit" class="btn">Save</button>
+  <button type="button" class="btn btn-primary" (click)="control.addStep()">Create new Step</button>
 </form>
-
-<account-toolbar>
-  <a routerLink="../list">Back</a>
-</account-toolbar>

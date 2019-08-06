@@ -10,7 +10,11 @@ export class AccountQuery extends Query<AccountState> {
     super(store);
   }
 
-  public isLoggedIn$ = this.select('address').pipe(map(uid => !!uid));
+  get isLoggedIn() {
+    return !!this.getValue().address;
+  }
+
+  public isLoggedIn$ = this.select('address').pipe(map(address => !!address));
   // public currentStep$ = this.select('currentStep');
 
   public getStepIndex(workshopId: string): number {

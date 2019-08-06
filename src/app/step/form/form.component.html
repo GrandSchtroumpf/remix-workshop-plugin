@@ -1,0 +1,32 @@
+<form [formGroup]="control">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Name</span>
+    </div>
+    <input formControlName="name" class="form-control" placeholder="Step name">
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Filename</span>
+    </div>
+    <input formControlName="fileName" class="form-control" placeholder="File name">
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">.md</span>
+    </div>
+    <input formControlName="markdown" class="form-control" placeholder="link for Markdown">
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">.sol</span>
+    </div>
+    <input formControlName="solidity" class="form-control" placeholder="link for Solidity">
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">test</span>
+    </div>
+    <input formControlName="test" class="form-control" placeholder="link for Test">
+  </div>
+</form>

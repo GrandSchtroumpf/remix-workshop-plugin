@@ -1,0 +1,19 @@
+<header class="bg-light">
+  <a class="btn back" routerLink="/workshops/list" role="button">
+    <span>Back</span>
+  </a>
+  <h4>Profile</h4>
+</header>
+
+<section>
+  <ul>
+    <li *ngFor="let template of templates$ | async">
+      {{ template.name }}
+    </li>
+  </ul>
+</section>
+
+
+<footer class="bg-light">
+  <a class="btn" routerLink="/workshops/create">Create workshop</a>
+</footer>

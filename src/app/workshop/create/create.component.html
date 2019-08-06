@@ -1,2 +1,12 @@
-<p>Create a Workshop</p>
-<workshop-form (update)="create($event)"></workshop-form>
+<header class="bg-light">
+  <h4>Create Workshop</h4>
+</header>
+
+<section>
+  <workshop-form [formGroup]="form"></workshop-form>
+</section>
+
+<footer class="bg-light">
+  <a class="btn" routerLink="../list">Cancel</a>
+  <a class="btn btn-success" (click)="create()">Save</a>
+</footer>

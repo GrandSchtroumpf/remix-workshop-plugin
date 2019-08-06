@@ -8,15 +8,11 @@
 header, footer {
   display: flex;
   align-items: center;
-  padding: 10px;
-  h4 {
-    margin: 0;
-  }
+  padding: 10px 5px;
 }
 
 section {
   flex: 1;
-  padding: 15px;
   overflow: auto;
 }
 
