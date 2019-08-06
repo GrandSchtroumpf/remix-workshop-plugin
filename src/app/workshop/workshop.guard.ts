@@ -44,7 +44,7 @@ export class StartedWorkshopGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot): boolean | UrlTree {
     const {workshopId} = next.params;
-    const hasStarted = this.accountQuery.hasStatedWorkshop(workshopId);
+    const hasStarted = this.accountQuery.hasStartedWorkshop(workshopId);
     const workshop = this.workshopQuery.getEntity(workshopId);
     this.stepStore.set(workshop.steps.map((step, id) => ({...step, id})));
     return hasStarted

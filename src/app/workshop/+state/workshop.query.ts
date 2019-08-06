@@ -14,11 +14,8 @@ export class WorkshopQuery extends QueryEntity<WorkshopState> {
 
   steps$ = this.selectActive().pipe(map(workshop => workshop.steps));
 
-  activeStep$ = combineLatest([
-    this.selectActive(),
-    this.accountQuery.currentStep$
-  ]).pipe(
-    map(([workshop, currentStep]) => {
+  activeStep$ = this.selectActive().pipe(
+    map((workshop) => {
       const stepIndex = this.accountQuery.getStepIndex(workshop.id);
       return workshop.steps[stepIndex];
     })

@@ -11,9 +11,10 @@ export class AccountQuery extends Query<AccountState> {
   }
 
   public isLoggedIn$ = this.select('address').pipe(map(uid => !!uid));
-  public currentStep$ = this.select('currentStep');
+  // public currentStep$ = this.select('currentStep');
 
   public getStepIndex(workshopId: string): number {
+    console.log({workshopId});
     if (!this.getValue().workshops[workshopId]) {
       return -1;
     }
@@ -24,7 +25,7 @@ export class AccountQuery extends Query<AccountState> {
     return this.getValue().workshops[workshopId][index];
   }
 
-  public hasStatedWorkshop(workshopId: string): boolean {
+  public hasStartedWorkshop(workshopId: string): boolean {
     return this.getStepIndex(workshopId) !== -1;
   }
 }

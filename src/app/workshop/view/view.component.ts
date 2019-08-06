@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Workshop, WorkshopQuery } from '../+state';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map} from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AccountService, AccountQuery } from 'src/app/account/+state';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -37,6 +37,7 @@ export class WorkshopViewComponent implements OnInit {
     this.workshop$ = this.query.selectActive();
     this.currentIndex$ = this.query.selectActiveId().pipe(
       map(id => this.accountQuery.getStepIndex(id) + 1),  // Need +1 to make *ngIf works
+      tap(index => console.log({index}))
     );
   }
 
