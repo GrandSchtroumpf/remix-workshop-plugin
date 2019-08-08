@@ -22,7 +22,7 @@ export class WorkshopEditComponent implements OnInit {
   }
 
   update() {
-    const workshop = this.form.value;
+    const workshop = { ...this.query.getActive(), ...this.form.value };
     this.service.update(workshop);
     this.router.navigate(['/workshops/list']);
   }

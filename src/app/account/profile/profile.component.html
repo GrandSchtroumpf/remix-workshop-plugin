@@ -6,9 +6,15 @@
 </header>
 
 <section>
-  <ul>
-    <li *ngFor="let template of templates$ | async">
-      {{ template.name }}
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let workshop of workshops$ | async">
+      <h3>{{ workshop.name }}</h3>
+      <p>{{ workshop.description }}</p>
+      <div class="actions">
+        <a [routerLink]="['/workshops', workshop.id, 'edit']" class="btn">
+          Edit
+        </a>
+      </div>
     </li>
   </ul>
 </section>

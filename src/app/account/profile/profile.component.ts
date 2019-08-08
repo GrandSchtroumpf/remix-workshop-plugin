@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountQuery } from '../+state';
-import { Workshop } from 'src/app/workshop/+state';
+import { Workshop, WorkshopQuery, WorkshopService } from 'src/app/workshop/+state';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,14 +9,16 @@ import { Observable } from 'rxjs';
 })
 export class ProfileComponent implements OnInit {
 
-  public templates$: Observable<Workshop[]>;
+  public workshops$: Observable<Workshop[]>;
 
   constructor(
-    private query: AccountQuery
+    private service: WorkshopService,
+    private query: WorkshopQuery
   ) { }
 
   ngOnInit() {
-    this.templates$ = this.query.select('templates');
+    this.service.getOwned();
+    this.workshops$ = this.query.owned$;
   }
 
 }

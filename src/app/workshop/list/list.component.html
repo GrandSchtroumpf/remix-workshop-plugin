@@ -4,19 +4,13 @@
       <h3>{{ workshop.name }}</h3>
       <p>{{ workshop.description }}</p>
       <div class="actions">
-        <a [routerLink]="['../', workshop.id]" class="btn">
-          <fa-icon [icon]="faEye"></fa-icon>
+        <a [routerLink]="['/workshops', workshop.id]" class="btn">
+          Start
         </a>
-        <ng-container *ngIf="isOwner(workshop)">
-          <a [routerLink]="['../', workshop.id, 'edit']" class="btn">
-            <fa-icon [icon]="faEdit"></fa-icon>
-          </a>
-        </ng-container>
       </div>
     </li>
   </ul>
-  <account-toolbar>
-    <a routerLink="/account/profile">Profile</a>
-  </account-toolbar>
 </ng-container>
-
+<account-toolbar>
+  <a routerLink="/account/profile">Profile</a>
+</account-toolbar>

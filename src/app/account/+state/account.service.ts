@@ -13,42 +13,43 @@ export class AccountService {
     private query: AccountQuery,
   ) {
     this.remix.onload(async () => {
+      // Set initial state
       const isLoggedIn = await this.remix.box.getUserAddress();
-      if (isLoggedIn) {
-        await this.remix.box.openSpace();
-        const [address, workshops, templates] = await this.getStateFromBox();
-        this.store.update({ address, workshops, templates });
-      }
+      isLoggedIn
+        ? this.onLoggedIn()
+        : this.store.update({ address: null });
+      // Listen on loggedIn event
+      this.remix.box.on('loggedIn', () => this.onLoggedIn());
+      // Listen on loggedOut event
+      this.remix.box.on('loggedOut', () => this.store.update({ address: null }));
     });
   }
 
-  getStateFromBox(): Promise<[string, Record<string, string[]>, Workshop[]]> {
+  private async onLoggedIn() {
+    await this.remix.box.openSpace();
+    const [address, progress ] = await this.getStateFromBox();
+    this.store.update({ address, progress  });
+  }
+
+  getStateFromBox(): Promise<[string, Record<string, string[]>]> {
     return Promise.all([
       this.remix.box.getUserAddress(),
-      this.remix.box.getSpacePrivateValue('workshops'),
-      this.remix.box.getSpacePublicValue('templates'),
-    ]).then(([address, workshops, templates]) => [
+      this.remix.box.getSpacePrivateValue('progress'),
+    ]).then(([address, progress ]) => [
       address,
-      JSON.parse(workshops || '{}'),
-      JSON.parse(templates || '[]'),
+      JSON.parse(progress || '{}'),
     ]);
   }
 
   async signin() {
     this.store.setLoading(true);
     await this.remix.box.login();
-    await this.remix.box.openSpace();
-    const [address, workshops, templates] = await this.getStateFromBox();
-    this.store.update({
-      address,
-      workshops,
-      templates,
-      loading: false
-    });
+    await this.onLoggedIn();
+    this.store.setLoading(false);
   }
 
   async logout() {
-    this.store.update({ address: null, workshops: {} });
+    this.store.update({ address: null, progress: {} });
   }
 
   startWorkshop(workshopId: string) {
@@ -56,10 +57,10 @@ export class AccountService {
   }
 
   updateWorkshop(workshopId: string, index: number, content: string) {
-    const { workshops } = this.query.getValue();
-    const workshop = Object.assign([], workshops[workshopId], { [index]: content });
-    const updated = { ...workshops, [workshopId]: workshop };
-    this.remix.box.setSpacePrivateValue('workshops', JSON.stringify(updated));
-    this.store.update({ workshops: updated });
+    const { progress } = this.query.getValue();
+    const workshop = Object.assign([], progress[workshopId], { [index]: content });
+    const updated = { ...progress, [workshopId]: workshop };
+    this.remix.box.setSpacePrivateValue('progress', JSON.stringify(updated));
+    this.store.update({ progress: updated });
   }
 }

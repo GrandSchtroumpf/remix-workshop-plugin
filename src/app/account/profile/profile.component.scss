@@ -13,7 +13,14 @@ header, footer {
 
 section {
   flex: 1;
+  padding: 20px;
   overflow: auto;
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 }
 
 footer {

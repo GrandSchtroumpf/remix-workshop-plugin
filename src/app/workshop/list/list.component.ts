@@ -2,10 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Workshop, WorkshopQuery } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
-import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { slideInY } from '../../animations';
-import { trigger, transition, query as queryChild, stagger, style } from '@angular/animations';
-import { tap } from 'rxjs/operators';
+import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
 
 const slideIn = trigger('slideIn', [
   transition(':enter', [
@@ -22,8 +20,6 @@ const slideIn = trigger('slideIn', [
 })
 export class WorkshopListComponent implements OnInit {
 
-  faEdit = faEdit;
-  faEye = faEye;
   workshops$: Observable<Workshop[]>;
 
   constructor(private query: WorkshopQuery, private accountQuery: AccountQuery) { }

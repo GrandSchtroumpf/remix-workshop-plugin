@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { WorkshopStore } from './workshop.store';
 import { Workshop } from './workshop.model';
+import { WorkshopQuery } from './workshop.query';
 import { REMIX, RemixClient } from 'src/app/remix-client';
 import { AccountQuery, AccountStore } from 'src/app/account/+state';
 
@@ -12,6 +13,7 @@ export class WorkshopService {
     private accountQuery: AccountQuery,
     private accountStore: AccountStore,
     private store: WorkshopStore,
+    private query: WorkshopQuery,
   ) {}
 
   async get(id: string) {
@@ -19,15 +21,26 @@ export class WorkshopService {
     return true;  // to change with 3box
   }
 
-  update(workshop: Workshop) {
-    this.store.update(workshop.id, workshop);
+  async getOwned() {
+    const fromBox = await this.remix.box.getSpacePublicValue('workshops');
+    const workshops = JSON.parse(fromBox || '[]');
+    this.store.upsertMany(workshops);
   }
 
-  async create(workshop: Workshop) {
-    const templates = [ ...this.accountQuery.getValue().templates, workshop ];
+  update(workshop: Workshop) {
     if (this.accountQuery.isLoggedIn) {
-      await this.remix.box.setSpacePublicValue('templates', JSON.stringify(templates));
+      console.log(workshop.id);
+      this.store.update(workshop.id, workshop);
+      const toBox = JSON.stringify(this.query.owned);
+      this.remix.box.setSpacePublicValue('workshops', toBox);
     }
-    return this.accountStore.update({ templates });
+  }
+
+  create(workshop: Workshop) {
+    if (this.accountQuery.isLoggedIn) {
+      this.store.add({ ...workshop, author: this.accountQuery.address });
+      const toBox = JSON.stringify(this.query.owned);
+      this.remix.box.setSpacePublicValue('workshops', toBox);
+    }
   }
 }

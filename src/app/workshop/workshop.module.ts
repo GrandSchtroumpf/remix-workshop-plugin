@@ -21,7 +21,7 @@ import { StepFormModule } from '../step/form/form.module';
     WorkshopViewComponent,
     WorkshopFormComponent,
     WorkshopEditComponent,
-    WorkshopCreateComponent
+    WorkshopCreateComponent,
   ],
   imports: [
     CommonModule,

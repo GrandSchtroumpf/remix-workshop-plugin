@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
 import { WorkshopStore, WorkshopState } from './workshop.store';
-import { combineLatest } from 'rxjs';
+import { Workshop } from './workshop.model';
 import { map } from 'rxjs/operators';
 import { AccountQuery } from 'src/app/account/+state';
 
@@ -13,6 +13,15 @@ export class WorkshopQuery extends QueryEntity<WorkshopState> {
   }
 
   steps$ = this.selectActive().pipe(map(workshop => workshop.steps));
+  owned$ = this.selectAll({ filterBy: entity => this.isOwned(entity) });
+
+  get owned() {
+    return this.getAll({ filterBy: entity => this.isOwned(entity) });
+  }
+
+  private isOwned(workshop: Workshop): boolean {
+    return workshop.author === this.accountQuery.address;
+  }
 
   activeStep$ = this.selectActive().pipe(
     map((workshop) => {

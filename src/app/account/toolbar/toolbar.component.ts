@@ -9,11 +9,13 @@ import { Observable } from 'rxjs';
 })
 export class ToolbarComponent implements OnInit {
   isLoggedIn$: Observable<boolean>;
+  isLoading$: Observable<boolean>;
 
   constructor(private service: AccountService, private query: AccountQuery) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.query.isLoggedIn$;
+    this.isLoading$ = this.query.selectLoading();
   }
 
   logout() {
