@@ -19,14 +19,16 @@ export class ActiveWorkshopGuard implements CanActivate {
 export class EditWorkshopGuard implements CanActivate {
 
   constructor(
+    private store: WorkshopStore,
     private query: WorkshopQuery,
     private accountQuery: AccountQuery,
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot): boolean {
-    const step = this.query.getActive();
+    this.store.setActive(next.params.workshopId);
+    const workshop = this.query.getActive();
     const account = this.accountQuery.getValue().address;
-    return step.author === account;
+    return workshop.author === account;
   }
 }
 

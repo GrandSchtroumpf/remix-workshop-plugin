@@ -4,8 +4,7 @@ import { Workshop } from 'src/app/workshop/+state';
 
 export interface AccountState {
   address: string;
-  workshops: Record<string, string[]>;
-  templates: Workshop[];
+  progress: Record<string, string[]>;
   loading: boolean;
 }
 
@@ -13,6 +12,6 @@ export interface AccountState {
 @StoreConfig({ name: 'account' })
 export class AccountStore extends Store<AccountState> {
   constructor() {
-    super({ workshops: {}, templates: [] });
+    super({ progress: {} });
   }
 }

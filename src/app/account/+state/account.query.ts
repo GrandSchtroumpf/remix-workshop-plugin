@@ -14,19 +14,21 @@ export class AccountQuery extends Query<AccountState> {
     return !!this.getValue().address;
   }
 
+  get address() {
+    return this.getValue().address;
+  }
+
   public isLoggedIn$ = this.select('address').pipe(map(address => !!address));
-  // public currentStep$ = this.select('currentStep');
 
   public getStepIndex(workshopId: string): number {
-    console.log({workshopId});
-    if (!this.getValue().workshops[workshopId]) {
+    if (!this.getValue().progress[workshopId]) {
       return -1;
     }
-    return this.getValue().workshops[workshopId].length - 1;
+    return this.getValue().progress[workshopId].length - 1;
   }
 
   public getStepContent(workshopId: string, index: number): string {
-    return this.getValue().workshops[workshopId][index];
+    return this.getValue().progress[workshopId][index];
   }
 
   public hasStartedWorkshop(workshopId: string): boolean {
