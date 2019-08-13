@@ -8,7 +8,11 @@
       <ng-content></ng-content>
     </ng-container>
     <ng-template #signin>
-      <account-signin></account-signin>
+      <button class="btn" (click)="login()">Signin</button>
     </ng-template>
   </ng-template>
 </footer>
+
+<ngb-toast *ngIf="error" [delay]="1000" (hide)="error = null">
+  {{ error }}
+</ngb-toast>

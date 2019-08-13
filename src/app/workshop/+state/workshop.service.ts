@@ -3,7 +3,7 @@ import { WorkshopStore } from './workshop.store';
 import { Workshop } from './workshop.model';
 import { WorkshopQuery } from './workshop.query';
 import { REMIX, RemixClient } from 'src/app/remix-client';
-import { AccountQuery, AccountStore } from 'src/app/account/+state';
+import { AccountQuery } from 'src/app/account/+state';
 
 @Injectable({ providedIn: 'root' })
 export class WorkshopService {
@@ -11,7 +11,6 @@ export class WorkshopService {
   constructor(
     @Inject(REMIX) private remix: RemixClient,
     private accountQuery: AccountQuery,
-    private accountStore: AccountStore,
     private store: WorkshopStore,
     private query: WorkshopQuery,
   ) {}
@@ -29,7 +28,6 @@ export class WorkshopService {
 
   update(workshop: Workshop) {
     if (this.accountQuery.isLoggedIn) {
-      console.log(workshop.id);
       this.store.update(workshop.id, workshop);
       const toBox = JSON.stringify(this.query.owned);
       this.remix.box.setSpacePublicValue('workshops', toBox);

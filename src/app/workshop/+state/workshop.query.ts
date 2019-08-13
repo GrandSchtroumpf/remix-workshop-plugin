@@ -8,6 +8,13 @@ import { AccountQuery } from 'src/app/account/+state';
 @Injectable({ providedIn: 'root' })
 export class WorkshopQuery extends QueryEntity<WorkshopState> {
 
+  activeStep$ = this.selectActive().pipe(
+    map((workshop) => {
+      const stepIndex = this.accountQuery.getStepIndex(workshop.id);
+      return workshop.steps[stepIndex];
+    })
+  );
+
   constructor(protected store: WorkshopStore, private accountQuery: AccountQuery) {
     super(store);
   }
@@ -23,10 +30,4 @@ export class WorkshopQuery extends QueryEntity<WorkshopState> {
     return workshop.author === this.accountQuery.address;
   }
 
-  activeStep$ = this.selectActive().pipe(
-    map((workshop) => {
-      const stepIndex = this.accountQuery.getStepIndex(workshop.id);
-      return workshop.steps[stepIndex];
-    })
-  );
 }
