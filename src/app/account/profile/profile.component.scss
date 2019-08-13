@@ -11,6 +11,10 @@ header, footer {
   padding: 10px 5px;
 }
 
+header {
+  justify-content: space-between;
+}
+
 section {
   flex: 1;
   padding: 20px;

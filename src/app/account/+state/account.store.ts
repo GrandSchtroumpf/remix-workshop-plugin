@@ -12,6 +12,6 @@ export interface AccountState {
 @StoreConfig({ name: 'account' })
 export class AccountStore extends Store<AccountState> {
   constructor() {
-    super({ progress: {} });
+    super({ address: null, progress: {} });
   }
 }

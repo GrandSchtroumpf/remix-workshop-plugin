@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@angular/core';
 import { AccountStore } from './account.store';
 import { AccountQuery } from './account.query';
 import { REMIX, RemixClient } from 'src/app/remix-client';
-import { Workshop } from 'src/app/workshop/+state';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -31,7 +30,7 @@ export class AccountService {
     this.store.update({ address, progress  });
   }
 
-  getStateFromBox(): Promise<[string, Record<string, string[]>]> {
+  private getStateFromBox(): Promise<[string, Record<string, string[]>]> {
     return Promise.all([
       this.remix.box.getUserAddress(),
       this.remix.box.getSpacePrivateValue('progress'),
@@ -43,8 +42,12 @@ export class AccountService {
 
   async signin() {
     this.store.setLoading(true);
-    await this.remix.box.login();
-    await this.onLoggedIn();
+    try {
+      await this.remix.box.login();
+      await this.onLoggedIn();
+    } catch (err) {
+      throw err;
+    }
     this.store.setLoading(false);
   }
 

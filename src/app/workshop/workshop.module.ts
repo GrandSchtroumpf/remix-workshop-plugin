@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BootstrapModule } from '../bootstrap.module';
-import { AccountModule } from '../account/account.module';
+import { BackButtonModule } from '../ui/back-button/back-button.module';
 import { StartedWorkshopGuard, ActiveWorkshopGuard, EditWorkshopGuard } from './workshop.guard';
 
 import { WorkshopListComponent } from './list/list.component';
@@ -14,6 +14,7 @@ import { WorkshopFormComponent } from './form/form.component';
 import { WorkshopEditComponent } from './edit/edit.component';
 import { WorkshopCreateComponent } from './create/create.component';
 import { StepFormModule } from '../step/form/form.module';
+import { AccountToolbarModule } from '../account/toolbar/toolbar.module';
 
 @NgModule({
   declarations: [
@@ -27,9 +28,10 @@ import { StepFormModule } from '../step/form/form.module';
     CommonModule,
     StepFormModule,
     BootstrapModule,
-    AccountModule,
+    AccountToolbarModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    BackButtonModule,
     RouterModule.forChild([
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: WorkshopListComponent },

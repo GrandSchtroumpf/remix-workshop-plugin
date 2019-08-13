@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Workshop, WorkshopQuery } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
-import { slideInY } from '../../animations';
+import { slideInY } from '../../ui/animations';
 import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
 
 const slideIn = trigger('slideIn', [

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { BootstrapModule } from './bootstrap.module';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { environment } from '../environments/environment';
+import { AccountGuard } from './account/account.guard';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { environment } from '../environments/environment';
       },
       {
         path: 'account',
+        canLoad: [AccountGuard],
         loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
       }
     ]),
