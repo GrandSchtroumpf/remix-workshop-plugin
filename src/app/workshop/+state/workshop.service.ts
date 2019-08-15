@@ -4,16 +4,29 @@ import { Workshop } from './workshop.model';
 import { WorkshopQuery } from './workshop.query';
 import { REMIX, RemixClient } from 'src/app/remix-client';
 import { AccountQuery } from 'src/app/account/+state';
+import { RemixWorkshopContract } from 'src/app/contracts/contract';
 
 @Injectable({ providedIn: 'root' })
 export class WorkshopService {
 
   constructor(
     @Inject(REMIX) private remix: RemixClient,
+    private contract: RemixWorkshopContract,
     private accountQuery: AccountQuery,
     private store: WorkshopStore,
     private query: WorkshopQuery,
   ) {}
+
+  async getAll() {
+    await this.remix.onload();
+    await this.remix.box.login();
+    const tutors = await this.contract.getTutors();
+    const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor, 'workshops'));
+    const spaces = await Promise.all(requests);
+    const workshopsByTutor = spaces.map(space => JSON.parse(space.workshops || '[]'));
+    const workshops = [].concat.apply([], workshopsByTutor);
+    this.store.upsertMany(workshops);
+  }
 
   async get(id: string) {
     this.store.setActive(id);

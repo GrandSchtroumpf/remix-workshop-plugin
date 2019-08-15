@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Workshop, WorkshopQuery } from '../+state';
+import { Workshop, WorkshopQuery, WorkshopService } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
 import { slideInY } from '../../ui/animations';
 import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
@@ -22,9 +22,14 @@ export class WorkshopListComponent implements OnInit {
 
   workshops$: Observable<Workshop[]>;
 
-  constructor(private query: WorkshopQuery, private accountQuery: AccountQuery) { }
+  constructor(
+    private service: WorkshopService,
+    private query: WorkshopQuery,
+    private accountQuery: AccountQuery
+  ) {}
 
   ngOnInit() {
+    this.service.getAll();
     this.workshops$ = this.query.selectAll();
   }
 
