@@ -8,7 +8,6 @@ export class AccountGuard implements CanLoad {
   constructor(private query: AccountQuery, private router: Router) {}
 
   canLoad() {
-    console.log('CHECK FOR LOGGIN');
     if (this.query.isLoggedIn) {
       return true;
     } else {
