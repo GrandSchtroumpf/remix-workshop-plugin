@@ -1,33 +1,59 @@
-import { Injectable, Inject } from '@angular/core';
-import { BaseProvider } from '@ethersproject/providers';
+import { Injectable } from '@angular/core';
 import { Contract } from '@ethersproject/contracts';
-import { PROVIDER } from '../ethers';
+import { MetaMaskProvider } from '../provider';
 import { ABI } from './abi';
 import { environment } from 'src/environments/environment';
+import { AccountStore, AccountQuery } from '../account/+state';
+import { fromEvent } from 'rxjs';
+import { tap, filter } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class RemixWorkshopContract extends Contract {
-  constructor(@Inject(PROVIDER) provider: BaseProvider) {
-    super(environment.address, ABI, provider);
+  constructor(
+    private metamask: MetaMaskProvider,
+    private store: AccountStore,
+    private query: AccountQuery,
+  ) {
+    super(environment.address, ABI, metamask.getSigner());
   }
 
-  register() {
+  onRegistration() {
+    this.isTutor(this.query.address).then(isTutor => this.store.update({ isTutor }));
+    return fromEvent<[string]>(this, 'Registration').pipe(
+      filter(([address]) => this.query.address === address),
+      tap(_ => this.store.update({ isTutor: true }))
+    );
+  }
+
+  onUnregistration() {
+    return fromEvent<[string]>(this, 'Unregistration').pipe(
+      filter(([address]) => this.query.getValue().address === address),
+      tap(_ => this.store.update({ isTutor: false }))
+    );
+  }
+
+  async register() {
+    await this.metamask.enable();
     return this.functions.register();
   }
 
-  unregister() {
+  async unregister() {
+    await this.metamask.enable();
     return this.functions.unregister();
   }
 
-  isTutor(address: string): Promise<boolean> {
+  async isTutor(address: string): Promise<boolean> {
+    await this.metamask.enable();
     return this.functions.isTutor(address);
   }
 
-  getSize(): Promise<number> {
+  async getSize(): Promise<number> {
+    await this.metamask.enable();
     return this.functions.getSize();
   }
 
-  getTutors(): Promise<string[]> {
+  async getTutors(): Promise<string[]> {
+    await this.metamask.enable();
     return this.functions.getTutors();
   }
 

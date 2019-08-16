@@ -6,6 +6,7 @@ export interface AccountState {
   address: string;
   progress: Record<string, string[]>;
   loading: boolean;
+  isTutor: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

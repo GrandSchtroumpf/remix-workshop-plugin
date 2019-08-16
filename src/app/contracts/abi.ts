@@ -18,6 +18,30 @@ export const ABI = [
     type: 'function'
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'tutor',
+        type: 'address'
+      }
+    ],
+    name: 'Registration',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'tutor',
+        type: 'address'
+      }
+    ],
+    name: 'Unregistration',
+    type: 'event'
+  },
+  {
     constant: true,
     inputs: [],
     name: 'getSize',
