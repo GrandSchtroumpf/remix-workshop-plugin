@@ -43,9 +43,9 @@ export class StepService {
     ]);
     this.store.upsert(index, {
       ...step,
-      markdown: markdown.content,
-      solidity: solidity.content,
-      test: test.content
+      markdown: markdown ? markdown.content : undefined,
+      solidity: solidity ? solidity.content : undefined,
+      test: test ? test.content : undefined
     });
     this.store.setLoading(false);
   }
@@ -54,10 +54,14 @@ export class StepService {
     const workshopId = this.workshopQuery.getActiveId();
     const stepIndex = this.store._value().active;
     // Get content from account or step
-    const content = this.accountQuery.getStepContent(workshopId, stepIndex) || step.solidity;
-    const path = getFilePath(step, 'solidity');
-    await this.remix.call('fileManager', 'setFile', path, content);
-    await this.remix.call('fileManager', 'switchFile', path);
+    if (step.solidity) {
+      const content = this.accountQuery.getStepContent(workshopId, stepIndex) || step.solidity;
+      const path = getFilePath(step, 'solidity');
+      await this.remix.call('fileManager', 'setFile', path, content);
+      await this.remix.call('fileManager', 'switchFile', path);
+    } else {
+      this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
+    }
   }
 
   async testStep(step: Step) {

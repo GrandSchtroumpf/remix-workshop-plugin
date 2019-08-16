@@ -20,18 +20,31 @@
 
   <markdown [data]="step.markdown"></markdown>
 
-  <footer class="bg-light">
-    <button class="btn" (click)="previous()" [disabled]="(index$ | async) === 0">
-      Previous
-    </button>
-    <ng-container *ngIf="!(isLoading$ | async); else loading">
-      <button class="btn btn-info test" (click)="test(step)">
-        Test
+  <!-- WITH TEST -->
+  <ng-container *ngIf="step.test; else noTest">
+    <footer class="bg-light">
+      <button class="btn" (click)="previous()" [disabled]="(index$ | async) === 0">
+        Previous
       </button>
-    </ng-container>
-    <ng-template #loading>
-      <span>drums rolling ....</span>
-    </ng-template>
-    <button class="btn btn-success" [disabled]="!(success$ | async)" (click)="next()">Next</button>
-  </footer>
+      <ng-container *ngIf="!(isLoading$ | async); else loading">
+        <button class="btn btn-info test" (click)="test(step)">
+          Test
+        </button>
+      </ng-container>
+      <ng-template #loading>
+        <span>drums rolling ....</span>
+      </ng-template>
+      <button class="btn btn-success" [disabled]="!(success$ | async)" (click)="next()">Next</button>
+    </footer>
+  </ng-container>
+
+  <!-- NO TEST -->
+  <ng-template #noTest>
+    <footer class="bg-light">
+      <button class="btn" (click)="previous()" [disabled]="(index$ | async) === 0">
+        Previous
+      </button>
+      <button class="btn btn-success" (click)="next()">Next</button>
+    </footer>
+  </ng-template>
 </ng-container>
