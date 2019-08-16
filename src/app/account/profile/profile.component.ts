@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Workshop, WorkshopQuery, WorkshopService } from 'src/app/workshop/+state';
 import { Observable, Subscription } from 'rxjs';
 import { RemixWorkshopContract } from 'src/app/contracts/contract';
-import { AccountStore, AccountQuery } from '../+state';
+import { AccountQuery } from '../+state';
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +35,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  async register() {
+  register() {
     this.contract.register();
+  }
+
+  unregister() {
+    this.contract.unregister();
   }
 }

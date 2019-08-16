@@ -6,7 +6,8 @@
 <section>
   <ng-container *ngIf="isTutor$ | async; else registration">
     <article>
-      <span>Welcome back !</span>
+      <span>You're registered as tutor</span>
+      <button class="btn btn-danger" (click)="unregister()">Unregister</button>
     </article>
   </ng-container>
   <ng-template #registration>
