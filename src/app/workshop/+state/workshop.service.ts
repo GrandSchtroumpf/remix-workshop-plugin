@@ -19,13 +19,15 @@ export class WorkshopService {
 
   async getAll() {
     await this.remix.onload();
-    await this.remix.box.login();
-    const tutors = await this.contract.getTutors();
-    const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor, 'workshops'));
-    const spaces = await Promise.all(requests);
-    const workshopsByTutor = spaces.map(space => JSON.parse(space.workshops || '[]'));
-    const workshops = [].concat.apply([], workshopsByTutor);
-    this.store.upsertMany(workshops);
+    const isLoggedIn = await this.remix.box.getUserAddress();
+    if (isLoggedIn) {
+      const tutors = await this.contract.getTutors();
+      const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor, 'workshops'));
+      const spaces = await Promise.all(requests);
+      const workshopsByTutor = spaces.map(space => JSON.parse(space.workshops || '[]'));
+      const workshops = [].concat.apply([], workshopsByTutor);
+      this.store.upsertMany(workshops);
+    }
   }
 
   async get(id: string) {

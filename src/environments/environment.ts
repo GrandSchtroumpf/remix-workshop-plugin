@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   network: 'goerli',
-  address: '0x91b3727317bf7eb686d43dbe015186253572b0c0'
+  address: '0x27acf9c815f3bc3b2913c16af763ff28692a0671'
 };
 
 /*
