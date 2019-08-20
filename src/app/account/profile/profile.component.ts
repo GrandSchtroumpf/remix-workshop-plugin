@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Workshop, WorkshopQuery, WorkshopService, WorkshopStore } from 'src/app/workshop/+state';
+import { Workshop, WorkshopQuery, WorkshopService } from 'src/app/workshop/+state';
 import { Observable, Subscription } from 'rxjs';
 import { RemixWorkshopContract } from 'src/app/contracts/contract';
 import { AccountQuery } from '../+state';
@@ -21,7 +21,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private contract: RemixWorkshopContract,
-    private workshopStore: WorkshopStore,
     private workshopService: WorkshopService,
     private workshopQuery: WorkshopQuery,
     private query: AccountQuery,
@@ -48,6 +47,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   unregister() {
     this.contract.unregister();
+  }
+
+  remove(id: string) {
+    this.workshopService.remove(id);
   }
 
   sync() {

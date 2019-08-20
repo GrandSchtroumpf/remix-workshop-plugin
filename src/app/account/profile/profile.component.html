@@ -22,7 +22,8 @@
       <h3>{{ workshop.name }}</h3>
       <p>{{ workshop.description }}</p>
       <div class="actions">
-        <a [routerLink]="['/workshops', workshop.id, 'edit']" class="btn">
+        <button class="btn" (click)="remove(workshop.id)">Remove</button>
+        <a [routerLink]="['/workshops', workshop.id, 'edit']" class="btn btn-info">
           Edit
         </a>
       </div>
