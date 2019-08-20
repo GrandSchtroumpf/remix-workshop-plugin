@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Step } from './step/+state';
 import { Workshop } from './workshop/+state';
 

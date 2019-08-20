@@ -4,6 +4,9 @@ import {HttpLinkModule, HttpLink} from 'apollo-angular-link-http';
 import {InMemoryCache, IntrospectionFragmentMatcher} from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { introspectionQueryResultData } from '../assets/fragments-type';
+import { REMIX, RemixClient } from './remix-client';
+import { from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 ////////////
 // SCHEMA //
@@ -15,24 +18,31 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 //////////
 // AUTH //
 //////////
-const authLink = new ApolloLink((operation, forward) => {
-  // Get the authentication token from local storage if it exists
-  const token = '85a99df89d7ceea7e2e5344b02cd63ff5cc6a18d';
+function getAuthLink(remix: RemixClient) {
+  return new ApolloLink((operation, forward) => {
+    // Get the authentication token from local storage if it exists
+    const tokenPromise = remix.call('settings' as any, 'getGithubAccessToken');
+    // return forward(operation);
+    return from(tokenPromise).pipe(
+      switchMap(token => {
+        // Use the setContext method to set the HTTP headers.
+        operation.setContext({
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-  // Use the setContext method to set the HTTP headers.
-  operation.setContext({
-      headers: { Authorization: `Bearer ${token}` }
+        // Call the next link in the middleware chain.
+        return forward(operation);
+      })
+    ) as any;
   });
-
-  // Call the next link in the middleware chain.
-  return forward(operation);
-});
+}
 
 /////////
 // URI //
 /////////
 const uri = 'https://api.github.com/graphql';
-export function createApollo(httpLink: HttpLink) {
+export function createApollo(httpLink: HttpLink, remix: RemixClient) {
+  const authLink = getAuthLink(remix);
   return {
     link: authLink.concat(httpLink.create({uri})),
     cache: new InMemoryCache({ fragmentMatcher }),
@@ -45,7 +55,7 @@ export function createApollo(httpLink: HttpLink) {
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink],
+      deps: [HttpLink, REMIX],
     },
   ],
 })
