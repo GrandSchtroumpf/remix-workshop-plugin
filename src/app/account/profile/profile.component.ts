@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Workshop, WorkshopQuery, WorkshopService } from 'src/app/workshop/+state';
+import { Workshop, WorkshopQuery, WorkshopService, WorkshopStore } from 'src/app/workshop/+state';
 import { Observable, Subscription } from 'rxjs';
 import { RemixWorkshopContract } from 'src/app/contracts/contract';
 import { AccountQuery } from '../+state';
+import { FormControl } from '@angular/forms';
+import { GithubService } from 'src/app/github.service';
+import { guid } from '@datorama/akita';
 
 @Component({
   selector: 'app-profile',
@@ -13,12 +16,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[];
   public workshops$: Observable<Workshop[]>;
   public isTutor$: Observable<boolean>;
+  public importMode = false;
+  public importForm = new FormControl('');
 
   constructor(
     private contract: RemixWorkshopContract,
+    private workshopStore: WorkshopStore,
     private workshopService: WorkshopService,
     private workshopQuery: WorkshopQuery,
     private query: AccountQuery,
+    private github: GithubService,
   ) { }
 
   ngOnInit() {
@@ -26,7 +33,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.contract.onRegistration().subscribe(),
       this.contract.onUnregistration().subscribe(),
     ];
-    this.workshopService.getOwned();
+    this.workshopService.getOwned();  // Get values from 3box
     this.workshops$ = this.workshopQuery.owned$;
     this.isTutor$ = this.query.select('isTutor');
   }
@@ -41,5 +48,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   unregister() {
     this.contract.unregister();
+  }
+
+  sync() {
+    this.github.get(this.importForm.value)
+      .subscribe((workshops) => {
+        const author = this.query.address;
+        const owned = this.workshopQuery.getAll().filter(w => w.author === author);
+        const result = workshops.map(workshop => {
+          const exist = owned.find(({ name }) => workshop.name === name);
+          const id = exist ? exist.id : guid();
+          return { ...workshop, author, id } as Workshop;
+        });
+        this.workshopService.create(result);
+      });
   }
 }

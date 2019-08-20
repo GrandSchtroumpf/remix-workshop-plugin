@@ -9,6 +9,7 @@ import { BootstrapModule } from './bootstrap.module';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { environment } from '../environments/environment';
 import { AccountGuard } from './account/account.guard';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AccountGuard } from './account/account.guard';
     ]),
     environment.production
       ? []
-      : [ AkitaNgDevtools.forRoot() ]
+      : [ AkitaNgDevtools.forRoot() ],
+    GraphQLModule
   ],
   bootstrap: [AppComponent]
 })

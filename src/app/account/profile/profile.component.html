@@ -13,7 +13,7 @@
   <ng-template #registration>
     <article>
       <span>Register as Tutor to make your workshop public</span>
-      <button class="btn btn-success" (click)="register()">Register</button>
+      <button class="btn btn-info" (click)="register()">Register</button>
     </article>
   </ng-template>
 
@@ -31,6 +31,25 @@
 </section>
 
 
-<footer class="bg-light">
-  <a class="btn" routerLink="/workshops/create">Create workshop</a>
+<footer class="bg-light" *ngIf="!importMode; else importFooter">
+  <a class="btn btn-success" routerLink="/workshops/create">Create workshop</a>
+  <button class="btn" (click)="importMode = !importMode">
+    <span *ngIf="!importMode">Or Import from Github</span>
+    <span *ngIf="importMode">Cancel</span>
+  </button>
 </footer>
+
+<!-- Form for importing workshops -->
+<ng-template #importFooter>
+  <footer class="bg-light import-footer">
+    <div class="form-group">
+      <label>Link to Github Repository</label>
+      <input class="form-control" [formControl]="importForm"
+        placeholder="e.g.: https://github.com/ethereum/remix-ide" />
+    </div>
+    <div class="actions">
+      <button class="btn" (click)="importMode = false">Cancel</button>
+      <button class="btn btn-success" (click)="sync()">Import workshops</button>
+    </div>
+  </footer>
+</ng-template>

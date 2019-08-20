@@ -17,7 +17,6 @@ header {
 
 section {
   flex: 1;
-  padding: 20px;
   overflow: auto;
 
   article {
@@ -25,19 +24,33 @@ section {
     justify-content: space-between;
     align-items: center;
     margin: 20px 0;
+    padding: 20px;
   }
 
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  ul {
+    padding: 20px;
+  }
+
+  .import-form {
+    padding: 10px;
   }
 }
 
 footer {
-  justify-content: flex-end;
+  justify-content: space-between;
 
   a {
     margin: 0 5px;
   }
+}
+
+footer.import-footer {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
