@@ -56,4 +56,12 @@ export class WorkshopService {
       this.remix.box.setSpacePublicValue('workshops', toBox);
     }
   }
+
+  remove(ids: string | string[]) {
+    if (this.accountQuery.isLoggedIn) {
+      this.store.remove(ids);
+      const toBox = JSON.stringify(this.query.owned);
+      this.remix.box.setSpacePublicValue('workshops', toBox);
+    }
+  }
 }
