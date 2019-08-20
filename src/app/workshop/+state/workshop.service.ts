@@ -49,9 +49,9 @@ export class WorkshopService {
     }
   }
 
-  create(workshop: Workshop) {
+  create(workshops: Workshop | Workshop[]) {
     if (this.accountQuery.isLoggedIn) {
-      this.store.add({ ...workshop, author: this.accountQuery.address });
+      this.store.add(workshops);
       const toBox = JSON.stringify(this.query.owned);
       this.remix.box.setSpacePublicValue('workshops', toBox);
     }
