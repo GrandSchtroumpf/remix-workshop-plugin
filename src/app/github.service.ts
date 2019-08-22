@@ -54,7 +54,7 @@ function getFiles(prefix: string, files: { name: string }[]): Partial<Step> {
   const solidity = files.find(({ name }) => name.endsWith('.sol') && !name.endsWith('_test.sol'));
   const markdown = files.find(({ name }) => name.endsWith('.md'));
   return {
-    fileName: solidity.name.split('.')[0],
+    fileName: solidity ? solidity.name.split('.')[0] : undefined,
     test: test ? `${prefix}/${test.name}` : undefined,
     solidity: solidity ? `${prefix}/${solidity.name}` : undefined,
     markdown: markdown ? `${prefix}/${markdown.name}` : undefined
