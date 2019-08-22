@@ -1,6 +1,6 @@
 <footer class="bg-light">
   <ng-container *ngIf="isLoading$ | async; else loaded">
-    <span class="btn">Requesting 3box plugin to sign in</span>
+    <span class="btn">Requesting 3box plugin to log in</span>
   </ng-container>
   <ng-template #loaded>
     <ng-container *ngIf="isLoggedIn$ | async; else login">
