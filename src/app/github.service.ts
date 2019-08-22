@@ -73,6 +73,7 @@ export class GithubService {
       .query<Response>({
         query: gql`{
         repository(owner: "${owner}", name: "${name}") {
+          url,
           ... on Repository {
             master: object(expression: "master:") {
               ... on Tree {
