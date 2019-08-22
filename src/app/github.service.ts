@@ -7,6 +7,7 @@ import { Workshop } from './workshop/+state';
 
 interface Response {
   repository: {
+    url: string,
     master: {
       workshops: WorkshopFolder[];
     };
@@ -53,6 +54,7 @@ function getFiles(prefix: string, files: { name: string }[]): Partial<Step> {
   const solidity = files.find(({ name }) => name.endsWith('.sol') && !name.endsWith('_test.sol'));
   const markdown = files.find(({ name }) => name.endsWith('.md'));
   return {
+    fileName: solidity.name.split('.')[0],
     test: test ? `${prefix}/${test.name}` : undefined,
     solidity: solidity ? `${prefix}/${solidity.name}` : undefined,
     markdown: markdown ? `${prefix}/${markdown.name}` : undefined
@@ -63,11 +65,14 @@ function getFiles(prefix: string, files: { name: string }[]): Partial<Step> {
 export class GithubService {
   constructor(private apollo: Apollo) {}
 
-  get(url: string) {
+  get(path: string) {
+    const splittedUrl = path.split('/');
+    const name = splittedUrl.pop();
+    const owner = splittedUrl.pop();
     return this.apollo
       .query<Response>({
         query: gql`{
-        repository: resource(url: "${url}") {
+        repository(owner: "${owner}", name: "${name}") {
           ... on Repository {
             master: object(expression: "master:") {
               ... on Tree {
@@ -95,8 +100,11 @@ export class GithubService {
       }`
       })
       .pipe(
-        map(res => res.data.repository.master.workshops),
-        map(workshops => getWorkshops(`${url}/tree/master`, workshops))
+        map(res => {
+          const { url } = res.data.repository;
+          const { workshops } = res.data.repository.master;
+          return getWorkshops(`${url}/tree/master`, workshops);
+        })
       );
   }
 }
