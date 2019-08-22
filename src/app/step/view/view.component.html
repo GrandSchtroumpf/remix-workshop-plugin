@@ -34,7 +34,7 @@
       <ng-template #loading>
         <span>drums rolling ....</span>
       </ng-template>
-      <button class="btn btn-success" [disabled]="!(success$ | async)" (click)="next()">Next</button>
+      <button class="btn btn-success" *ngIf="(success$ | async)" (click)="next()">Next</button>
     </footer>
   </ng-container>
 

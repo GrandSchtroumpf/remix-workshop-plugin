@@ -23,6 +23,6 @@ export class WorkshopCreateComponent {
     const workshop = { id: guid(), ...this.form.value };
     const author = this.accountQuery.getValue().address;
     this.service.create({ ...workshop, author });
-    this.router.navigate(['/workshops/list']);
+    this.router.navigate(['/account']);
   }
 }

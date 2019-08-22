@@ -22,7 +22,7 @@ export class WorkshopService {
     const isLoggedIn = await this.remix.box.getUserAddress();
     if (isLoggedIn) {
       const tutors = await this.contract.getTutors();
-      const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor, 'workshops'));
+      const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor, undefined));
       const spaces = await Promise.all(requests);
       const workshopsByTutor = spaces.map(space => JSON.parse(space.workshops || '[]'));
       const workshops = [].concat.apply([], workshopsByTutor);
@@ -51,7 +51,9 @@ export class WorkshopService {
 
   create(workshops: Workshop | Workshop[]) {
     if (this.accountQuery.isLoggedIn) {
-      this.store.add(workshops);
+      Array.isArray(workshops)
+        ? this.store.upsertMany(workshops)
+        : this.store.add(workshops);
       const toBox = JSON.stringify(this.query.owned);
       this.remix.box.setSpacePublicValue('workshops', toBox);
     }

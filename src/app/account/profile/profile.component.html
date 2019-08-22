@@ -19,7 +19,7 @@
 
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let workshop of workshops$ | async">
-      <h3>{{ workshop.name }}</h3>
+      <h4>{{ workshop.name }}</h4>
       <p>{{ workshop.description }}</p>
       <div class="actions">
         <button class="btn" (click)="remove(workshop.id)">Remove</button>

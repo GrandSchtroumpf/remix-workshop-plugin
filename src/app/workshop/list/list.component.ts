@@ -4,6 +4,7 @@ import { Workshop, WorkshopQuery, WorkshopService } from '../+state';
 import { AccountQuery } from 'src/app/account/+state';
 import { slideInY } from '../../ui/animations';
 import { trigger, transition, query as queryChild, stagger } from '@angular/animations';
+import { MetaMaskProvider } from 'src/app/provider';
 
 const slideIn = trigger('slideIn', [
   transition(':enter', [
@@ -21,16 +22,20 @@ const slideIn = trigger('slideIn', [
 export class WorkshopListComponent implements OnInit {
 
   workshops$: Observable<Workshop[]>;
+  network: string;
 
   constructor(
     private service: WorkshopService,
     private query: WorkshopQuery,
-    private accountQuery: AccountQuery
+    private accountQuery: AccountQuery,
+    private provider: MetaMaskProvider,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.service.getAll();
     this.workshops$ = this.query.selectAll();
+    const { name } = await this.provider.getNetwork();
+    this.network = name;
   }
 
   trackByFn(index: number, workshop: Workshop) {
@@ -41,4 +46,7 @@ export class WorkshopListComponent implements OnInit {
     return workshop.author === this.accountQuery.getValue().address;
   }
 
+  sync() {
+    this.service.getAll();
+  }
 }

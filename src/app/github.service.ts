@@ -104,7 +104,7 @@ export class GithubService {
         map(res => {
           const { url } = res.data.repository;
           const { workshops } = res.data.repository.master;
-          return getWorkshops(`${url}/tree/master`, workshops);
+          return getWorkshops(`${url}/blob/master`, workshops);
         })
       );
   }

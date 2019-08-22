@@ -1,7 +1,16 @@
 <ng-container *ngIf="workshops$ | async as workshops">
+  <header>
+    <h4>Workshops</h4>
+    <button *ngIf="network === 'goerli'" class="btn" (click)="sync()">
+      Sync
+    </button>
+    <span *ngIf="network !== 'goerli'" class="text-danger">
+      You have to use <b>Goerli</b>
+    </span>
+  </header>
   <ul @slideIn class="list-group">
     <li class="list-group-item" *ngFor="let workshop of workshops$ | async; trackBy: trackByFn">
-      <h3>{{ workshop.name }}</h3>
+      <h4>{{ workshop.name }}</h4>
       <p>{{ workshop.description }}</p>
       <div class="actions">
         <a [routerLink]="['/workshops', workshop.id]" class="btn">
