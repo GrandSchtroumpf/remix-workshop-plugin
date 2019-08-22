@@ -1,14 +1,14 @@
 <footer class="bg-light">
   <ng-container *ngIf="isLoading$ | async; else loaded">
-    <span class="btn">Request 3box plugin to signin</span>
+    <span class="btn">Request 3box plugin to log in</span>
   </ng-container>
   <ng-template #loaded>
-    <ng-container *ngIf="isLoggedIn$ | async; else signin">
+    <ng-container *ngIf="isLoggedIn$ | async; else login">
       <button class="btn" (click)="logout()">Logout</button>
       <ng-content></ng-content>
     </ng-container>
-    <ng-template #signin>
-      <button class="btn" (click)="login()">Signin</button>
+    <ng-template #login>
+      <button class="btn" (click)="login()">Log in</button>
     </ng-template>
   </ng-template>
 </footer>

@@ -21,7 +21,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   login() {
-    this.service.signin()
+    this.service.login()
       .catch(err => this.error = err);
   }
 

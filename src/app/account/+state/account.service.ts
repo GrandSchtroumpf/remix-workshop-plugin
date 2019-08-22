@@ -40,7 +40,7 @@ export class AccountService {
     ]);
   }
 
-  async signin() {
+  async login() {
     this.store.setLoading(true);
     try {
       await this.remix.box.login();
