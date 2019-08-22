@@ -21,17 +21,14 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 function getAuthLink(remix: RemixClient) {
   return new ApolloLink((operation, forward) => {
     // Get the authentication token from local storage if it exists
-    const tokenPromise = remix.call('settings' as any, 'getGithubAccessToken');
+    const tokenPromise = remix.call('settings', 'getGithubAccessToken');
     // return forward(operation);
     return from(tokenPromise).pipe(
       switchMap(token => {
         // Use the setContext method to set the HTTP headers.
-        operation.setContext({
-            headers: { Authorization: `Bearer ${token}` }
-        });
-
-        // Call the next link in the middleware chain.
-        return forward(operation);
+        const headers = { Authorization: `Bearer ${token}` };
+        operation.setContext({ headers });
+        return forward(operation); // Call the next link in the middleware chain.
       })
     ) as any;
   });
