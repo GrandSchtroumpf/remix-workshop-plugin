@@ -3,11 +3,11 @@
     <span class="btn">Requesting 3box plugin to log in</span>
   </ng-container>
   <ng-template #loaded>
-    <ng-container *ngIf="isLoggedIn$ | async; else login">
+    <ng-container *ngIf="isLoggedIn$ | async; else loginBtn">
       <button class="btn" (click)="logout()">Logout</button>
       <ng-content></ng-content>
     </ng-container>
-    <ng-template #login>
+    <ng-template #loginBtn>
       <button class="btn" (click)="login()">Log in</button>
     </ng-template>
   </ng-template>
