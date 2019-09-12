@@ -21,6 +21,7 @@ export class StepGuard implements CanActivate {
     const index = parseInt(stepId, 10);
     const workshop = this.workshopQuery.getActive();
     const currentStep = this.accountQuery.getStepIndex(workshop.id);
+    console.log('Guard', index, currentStep);
     if (index > currentStep) {
       return false;
     } else {

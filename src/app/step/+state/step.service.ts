@@ -85,7 +85,8 @@ export class StepService {
 
       // Update next step of the account if succeed
       if (success) {
-        this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
+        this.next();
+        // this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
       }
     } catch (err) {
       this.store.update({
@@ -94,6 +95,12 @@ export class StepService {
       });
       console.log(err);
     }
+  }
+
+  next() {
+    const workshopId = this.workshopQuery.getActiveId();
+    const stepIndex = this.store._value().active;
+    this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
   }
 
   add(step: Step) {

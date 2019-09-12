@@ -1,13 +1,19 @@
 <ng-container *ngIf="workshops$ | async as workshops">
   <header>
     <h4>Workshops</h4>
-    <button *ngIf="network === 'goerli'" class="btn" (click)="sync()">
-      Sync
-    </button>
-    <span *ngIf="network !== 'goerli'" class="text-danger">
-      You have to use <b>Goerli</b>
-    </span>
+    <ng-container *ngIf="loggedIn$ | async; else loginAlert">
+      <button *ngIf="network === 'goerli'" class="btn" (click)="sync()">
+        Sync
+      </button>
+      <span *ngIf="network !== 'goerli'" class="text-danger">
+        You have to use <b>Goerli</b>
+      </span>
+    </ng-container>
+    <ng-template #loginAlert>
+      <span class="text-danger">You need to signin first</span>
+    </ng-template>
   </header>
+
   <ul @slideIn class="list-group">
     <li class="list-group-item" *ngFor="let workshop of workshops$ | async; trackBy: trackByFn">
       <h4>{{ workshop.name }}</h4>
@@ -21,6 +27,6 @@
   </ul>
 </ng-container>
 
-<account-toolbar>
+<account-toolbar (loggedIn)="sync()">
   <a routerLink="/account/profile">Profile</a>
 </account-toolbar>

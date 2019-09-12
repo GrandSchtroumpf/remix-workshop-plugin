@@ -8,6 +8,6 @@ import { REMIX } from './remix-client';
 })
 export class AppComponent {
   // Inject remix at startup time to get the load event
-  constructor(@Inject(REMIX) remix) {}
+  constructor() {}
 
 }

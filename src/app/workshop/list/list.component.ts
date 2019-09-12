@@ -22,6 +22,7 @@ const slideIn = trigger('slideIn', [
 export class WorkshopListComponent implements OnInit {
 
   workshops$: Observable<Workshop[]>;
+  loggedIn$: Observable<boolean>;
   network: string;
 
   constructor(
@@ -32,6 +33,7 @@ export class WorkshopListComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.loggedIn$ = this.accountQuery.isLoggedIn$;
     this.service.getAll();
     this.workshops$ = this.query.selectAll();
     const { name } = await this.provider.getNetwork();

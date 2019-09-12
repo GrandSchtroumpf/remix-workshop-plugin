@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { AccountQuery, AccountService } from '../+state';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,9 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToolbarComponent implements OnInit {
+
+  @Output() loggedIn = new EventEmitter();
+
   isLoggedIn$: Observable<boolean>;
   isLoading$: Observable<boolean>;
   error: string;
@@ -22,6 +25,7 @@ export class ToolbarComponent implements OnInit {
 
   login() {
     this.service.signin()
+      .then(_ => this.loggedIn.emit())
       .catch(err => this.error = err);
   }
 

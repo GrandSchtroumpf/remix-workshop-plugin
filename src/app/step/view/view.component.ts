@@ -52,11 +52,18 @@ export class StepViewComponent implements OnInit {
     }
   }
 
-  next() {
-    const current = this.query.getActiveId();
-    const isLast = this.query.getCount() === current + 1;
-    const path = isLast ? ['../../view'] : ['..', current + 1];
-    this.router.navigate(path, { relativeTo: this.route });
+  async next() {
+    try {
+      const current = this.query.getActiveId();
+      const isLast = this.query.getCount() === current + 1;
+      const path = isLast ? ['../../view'] : ['..', current + 1];
+      if (!this.query.getActive().test && !isLast) {
+        this.service.next();
+      }
+      await this.router.navigate(path, { relativeTo: this.route });
+    } catch (err) {
+      console.log('Cannot go next', err);
+    }
   }
 
 }
