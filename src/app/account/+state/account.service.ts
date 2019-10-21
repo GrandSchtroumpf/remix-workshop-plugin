@@ -25,7 +25,10 @@ export class AccountService {
   }
 
   private async onLoggedIn() {
-    await this.remix.box.openSpace();
+    const isOpen = await this.remix.box.openSpace();
+    if (!isOpen) {
+      throw new Error('Could not open space');
+    }
     const [address, progress ] = await this.getStateFromBox();
     this.store.update({ address, progress  });
   }

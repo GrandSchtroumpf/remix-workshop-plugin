@@ -22,7 +22,7 @@ export class WorkshopService {
     const isLoggedIn = await this.remix.box.getUserAddress();
     if (isLoggedIn) {
       const tutors = await this.contract.getTutors();
-      const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor, undefined));
+      const requests = tutors.map(tutor => this.remix.box.getSpacePublicData(tutor));
       const spaces = await Promise.all(requests);
       const workshopsByTutor = spaces.map(space => JSON.parse(space.workshops || '[]'));
       const workshops = [].concat.apply([], workshopsByTutor);

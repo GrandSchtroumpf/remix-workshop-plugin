@@ -1,0 +1,8 @@
+<ng-container *ngFor="let toast of toasts$ | async">
+  <ngb-toast
+    @slide
+    [header]="toast.title"
+    [class]="'bg-'+toast.type">
+    {{toast.content}}
+  </ngb-toast>
+</ng-container>

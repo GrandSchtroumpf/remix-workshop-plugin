@@ -4,9 +4,16 @@ import {
   NgbAlertModule,
   NgbAccordionModule,
   NgbPopoverModule,
+  NgbToastModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  exports: [NgbButtonsModule, NgbAlertModule, NgbAccordionModule, NgbPopoverModule],
+  exports: [
+    NgbButtonsModule,
+    NgbAlertModule,
+    NgbAccordionModule,
+    NgbPopoverModule,
+    NgbToastModule
+  ]
 })
 export class BootstrapModule {}

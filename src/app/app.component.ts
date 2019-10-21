@@ -1,13 +1,15 @@
-import { Component, Inject } from '@angular/core';
-import { REMIX } from './remix-client';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
-  styles: [':host {height: 100%; display: block;}']
+  template: `
+    <main>
+      <router-outlet></router-outlet>
+      <app-toaster></app-toaster>
+    </main>
+  `,
+  styles: [':host, main {height: 100%; display: block;}']
 })
 export class AppComponent {
-  // Inject remix at startup time to get the load event
   constructor() {}
-
 }

@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "serve:https": "ng serve --ssl --ssl-key D:/programmation/_certificates/localhost.key  --ssl-cert D:/programmation/_certificates/localhost.crt"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +25,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
-    "@remixproject/plugin": "^0.1.14",
+    "@remixproject/plugin": "^0.1.18",
     "apollo-angular": "^1.6.0",
     "apollo-angular-link-http": "^1.6.0",
     "apollo-cache-inmemory": "^1.3.2",

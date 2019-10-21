@@ -10,10 +10,12 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { environment } from '../environments/environment';
 import { AccountGuard } from './account/account.guard';
 import { GraphQLModule } from './graphql.module';
+import { ToasterComponent } from './notification/toaster/toaster.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ToasterComponent
   ],
   imports: [
     BrowserModule,

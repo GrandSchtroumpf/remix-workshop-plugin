@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { map, tap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Step } from './step/+state';
 import { Workshop } from './workshop/+state';
+import { NotificationStore } from './notification/+state';
 
 interface Response {
   repository: {
-    url: string,
+    url: string;
     master: {
       workshops: WorkshopFolder[];
     };
@@ -29,7 +30,10 @@ interface StepFolder {
 }
 
 /** Create an array of Workshop */
-function getWorkshops(prefix: string, workshops: WorkshopFolder[]): Partial<Workshop>[] {
+function getWorkshops(
+  prefix: string,
+  workshops: WorkshopFolder[]
+): Partial<Workshop>[] {
   return workshops
     .filter(({ content }) => !!content.steps)
     .map(({ name, content }) => ({
@@ -42,16 +46,21 @@ function getWorkshops(prefix: string, workshops: WorkshopFolder[]): Partial<Work
 function getSteps(prefix: string, steps: StepFolder[]): Step[] {
   return steps
     .filter(({ content }) => !!content.files)
-    .map(({ name, content }) => ({
-      name,
-      ...getFiles(`${prefix}/${name}`, content.files)
-    } as Step));
+    .map(
+      ({ name, content }) =>
+        ({
+          name,
+          ...getFiles(`${prefix}/${name}`, content.files)
+        } as Step)
+    );
 }
 
 /** Create files url from the files name */
 function getFiles(prefix: string, files: { name: string }[]): Partial<Step> {
   const test = files.find(({ name }) => name.endsWith('_test.sol'));
-  const solidity = files.find(({ name }) => name.endsWith('.sol') && !name.endsWith('_test.sol'));
+  const solidity = files.find(
+    ({ name }) => name.endsWith('.sol') && !name.endsWith('_test.sol')
+  );
   const markdown = files.find(({ name }) => name.endsWith('.md'));
   return {
     fileName: solidity ? solidity.name.split('.')[0] : undefined,
@@ -63,7 +72,10 @@ function getFiles(prefix: string, files: { name: string }[]): Partial<Step> {
 
 @Injectable({ providedIn: 'root' })
 export class GithubService {
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private apollo: Apollo,
+    private notifications: NotificationStore
+  ) {}
 
   get(path: string) {
     const splittedUrl = path.split('/');
@@ -105,6 +117,10 @@ export class GithubService {
           const { url } = res.data.repository;
           const { workshops } = res.data.repository.master;
           return getWorkshops(`${url}/blob/master`, workshops);
+        }),
+        catchError(err => {
+          this.notifications.show({ content: err.message, type: 'danger' });
+          return [];
         })
       );
   }

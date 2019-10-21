@@ -22,6 +22,9 @@ function getAuthLink(remix: RemixClient) {
     const tokenPromise = remix.call('settings', 'getGithubAccessToken');
     return fromPromise(tokenPromise)
     .flatMap(token => {
+      if (!token) {
+        throw new Error('You need a Github Token but none was found');
+      }
       // Use the setContext method to set the HTTP headers.
       const headers = { Authorization: `Bearer ${token}` };
       operation.setContext({ headers });
