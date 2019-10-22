@@ -6,6 +6,7 @@ import { REMIX } from 'src/app/remix-client';
 import { PluginClient } from '@remixproject/plugin';
 import { AccountQuery, AccountService } from 'src/app/account/+state';
 import { WorkshopQuery } from 'src/app/workshop/+state';
+import { NotificationStore } from 'src/app/notification/+state';
 
 /** Create the path for the file manager based on a step */
 function getFilePath(step: Step, type: 'test' | 'solidity'): string {
@@ -32,7 +33,8 @@ export class StepService {
     private accountQuery: AccountQuery,
     private accountService: AccountService,
     private workshopQuery: WorkshopQuery,
-    private store: StepStore
+    private store: StepStore,
+    private toaster: NotificationStore
   ) {}
 
   async get(index: number, step: Step) {
@@ -86,7 +88,10 @@ export class StepService {
       // Update next step of the account if succeed
       if (success) {
         this.next();
+        this.toaster.show({ content: 'Well Done ! 🥳', type: 'success' });
         // this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
+      } else {
+        this.toaster.show({ content: 'Not exactly 👩‍💻', type: 'warning' });
       }
     } catch (err) {
       this.store.update({

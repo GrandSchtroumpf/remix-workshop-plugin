@@ -5,7 +5,7 @@ export interface Notification {
   content: string;
   title: string;
   delay: number;
-  type: 'danger' | 'success' | 'primary';
+  type: 'danger' | 'success' | 'warning' | 'info' | 'primary' | 'secondary' | 'light' | 'dark';
   action?: string;
 }
 

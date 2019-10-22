@@ -3,6 +3,6 @@
     @slide
     [header]="toast.title"
     [class]="'bg-'+toast.type">
-    {{toast.content}}
+    <span *ngIf="toast.content">{{toast.content}}</span>
   </ngb-toast>
 </ng-container>
