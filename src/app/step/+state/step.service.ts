@@ -7,6 +7,7 @@ import { PluginClient } from '@remixproject/plugin';
 import { AccountQuery, AccountService } from 'src/app/account/+state';
 import { WorkshopQuery } from 'src/app/workshop/+state';
 import { NotificationStore } from 'src/app/notification/+state';
+import { showStars } from '../../ui/stars.mo';
 
 /** Create the path for the file manager based on a step */
 function getFilePath(step: Step, type: 'test' | 'solidity'): string {
@@ -88,7 +89,7 @@ export class StepService {
       // Update next step of the account if succeed
       if (success) {
         this.next();
-        this.toaster.show({ content: 'Well Done ! 🥳', type: 'success' });
+        showStars({ x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 });
         // this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
       } else {
         this.toaster.show({ content: 'Not exactly 👩‍💻', type: 'warning' });
