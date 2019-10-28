@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
-import { AccountQuery, AccountService } from '../+state';
+import { AccountQuery, AccountService, AccountState } from '../+state';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,6 +14,7 @@ export class ToolbarComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
   isLoading$: Observable<boolean>;
+  isOpeningSpace$: Observable<boolean>;
   error: string;
 
   constructor(private service: AccountService, private query: AccountQuery) { }
@@ -21,6 +22,7 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
     this.isLoggedIn$ = this.query.isLoggedIn$;
     this.isLoading$ = this.query.selectLoading();
+    this.isOpeningSpace$ = this.query.select('openingSpace');
   }
 
   login() {

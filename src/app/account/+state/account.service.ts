@@ -19,18 +19,36 @@ export class AccountService {
         : this.store.update({ address: null });
       // Listen on loggedIn event
       this.remix.box.on('loggedIn', () => this.onLoggedIn());
+      // Listen on spaceOpened event
+      this.remix.box.on('spaceOpened', () => this.onSpaceOpened());
       // Listen on loggedOut event
-      this.remix.box.on('loggedOut', () => this.store.update({ address: null }));
+      this.remix.box.on('loggedOut', () => this.logout());
     });
   }
 
   private async onLoggedIn() {
-    const isOpen = await this.remix.box.openSpace();
-    if (!isOpen) {
-      throw new Error('Could not open space');
+    try {
+      console.log('LoggedIn with 3Box. Opening Space');
+      this.store.update({ loading: true, openingSpace: true });
+      const isOpen = await this.remix.box.openSpace();
+      if (!isOpen) {
+        this.store.update({ loading: false, openingSpace: false });
+      }
+    } catch (err) {
+      this.store.update({ loading: false, openingSpace: false });
+      console.error(err);
     }
-    const [address, progress ] = await this.getStateFromBox();
-    this.store.update({ address, progress  });
+  }
+
+  private async onSpaceOpened() {
+    try {
+      console.log('Space Opened with 3Box. Getting the state');
+      const [ address, progress ] = await this.getStateFromBox();
+      this.store.update({ address, progress, loading: false, openingSpace: false  });
+    } catch (err) {
+      this.store.update({ loading: false, openingSpace: false });
+      console.error(err);
+    }
   }
 
   private getStateFromBox(): Promise<[string, Record<string, string[]>]> {
@@ -44,14 +62,20 @@ export class AccountService {
   }
 
   async login() {
-    this.store.setLoading(true);
     try {
-      await this.remix.box.login();
-      await this.onLoggedIn();
+      this.store.update({ loading: true, openingSpace: false });
+      const enabled = await this.remix.box.isEnabled();
+      if (enabled) {  // If already enable, open space
+        return this.onLoggedIn();
+      }
+      const isLoggedIn = await this.remix.box.login();
+      if (isLoggedIn) {
+        this.store.setLoading(false);
+      }
     } catch (err) {
+      this.store.setLoading(false);
       throw err;
     }
-    this.store.setLoading(false);
   }
 
   async logout() {

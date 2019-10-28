@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class AccountQuery extends Query<AccountState> {
 
+  public isLoggedIn$ = this.select('address').pipe(map(address => !!address));
+
   constructor(protected store: AccountStore) {
     super(store);
   }
@@ -18,7 +20,6 @@ export class AccountQuery extends Query<AccountState> {
     return this.getValue().address;
   }
 
-  public isLoggedIn$ = this.select('address').pipe(map(address => !!address));
 
   public getStepIndex(workshopId: string): number {
     if (!this.getValue().progress[workshopId]) {

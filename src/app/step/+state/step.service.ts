@@ -8,6 +8,7 @@ import { AccountQuery, AccountService } from 'src/app/account/+state';
 import { WorkshopQuery } from 'src/app/workshop/+state';
 import { NotificationStore } from 'src/app/notification/+state';
 import { showStars } from '../../ui/stars.mo';
+import { StepQuery } from './step.query';
 
 /** Create the path for the file manager based on a step */
 function getFilePath(step: Step, type: 'test' | 'solidity'): string {
@@ -35,6 +36,7 @@ export class StepService {
     private accountService: AccountService,
     private workshopQuery: WorkshopQuery,
     private store: StepStore,
+    private query: StepQuery,
     private toaster: NotificationStore
   ) {}
 
@@ -83,24 +85,32 @@ export class StepService {
 
       // Update store after tests have run
       const success = result.totalFailing === 0;
-      const error = result.totalFailing === 0 ? null : result.errors;
-      this.store.update({ success, error, loading: false });
 
       // Update next step of the account if succeed
       if (success) {
-        this.next();
+        this.store.update({ success, errorCount: 0, loading: false });
         showStars({ x: document.body.clientWidth / 2, y: document.body.clientHeight / 2 });
+        this.next();
         // this.accountService.updateWorkshop(workshopId, stepIndex + 1, '');
       } else {
-        this.toaster.show({ content: 'Not exactly 👩‍💻', type: 'warning' });
+        this.addError(result.errors);
       }
     } catch (err) {
-      this.store.update({
-        error: [{ message: err }],
-        loading: false
-      });
-      console.log(err);
+      const error = [{ message: err }];
+      this.addError(error);
     }
+  }
+
+  /** Update the store and display message to user */
+  addError(error: { message: string }[]) {
+    this.store.update(s => ({
+      errorCount: s.errorCount + 1,
+      error,
+      loading: false
+    }));
+    const { errorCount } = this.query.getValue();
+    const msg = `You lose ${errorCount} time ${Array(errorCount).fill('👻').join('')}`;
+    this.toaster.show({ content: msg, type: 'warning', delay: 5000 });
   }
 
   next() {
