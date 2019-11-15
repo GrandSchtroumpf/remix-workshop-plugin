@@ -1,0 +1,28 @@
+<!-- Loading -->
+<ng-container *ngIf="isLoading$ | async; else idle">
+  <!-- Open 3Box Space -->
+  <ng-container *ngIf="isOpeningSpace$ | async; else isLogin">
+    <span class="btn">Opening 3Box Space</span>
+  </ng-container>
+  <!-- Loging -->
+  <ng-template #isLogin>
+    <span class="btn">Requesting 3Box plugin to log in</span>
+  </ng-template>
+</ng-container>
+
+<!-- LoggedIn / LoggedOut -->
+<ng-template #idle>
+  <!-- LoggedIn -->
+  <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">
+    <button class="btn" (click)="logout()">Logout</button>
+    <ng-content></ng-content>
+  </ng-container>
+  <!-- LoggedOut -->
+  <ng-template #loggedOut>
+    <button class="btn" (click)="login()">Log in</button>
+  </ng-template>
+</ng-template>
+
+<ngb-toast *ngIf="error" [delay]="1000" (hide)="error = null">
+  {{ error }}
+</ngb-toast>

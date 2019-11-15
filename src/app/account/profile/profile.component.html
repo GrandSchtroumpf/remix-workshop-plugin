@@ -1,52 +1,77 @@
 <header class="bg-light">
-  <back-button link="/workshops/list"></back-button>
-  <h4>Profile</h4>
+  <h4>Activity</h4>
 </header>
 
-<section>
-  <ng-container *ngIf="isTutor$ | async; else registration">
-    <article>
-      <span>You're registered as tutor</span>
-      <button class="btn btn-danger" (click)="unregister()">Unregister</button>
-    </article>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <button class="nav-link" [ngClass]="{active: tab === 'taken'}" (click)="tab = 'taken'">Taken</button>
+  </li>
+  <li class="nav-item">
+    <button class="nav-link" [ngClass]="{active: tab === 'created'}" (click)="tab = 'created'">Created</button>
+  </li>
+  <li class="nav-item">
+    <button class="nav-link" [ngClass]="{active: tab === 'create'}" (click)="tab = 'create'">Create</button>
+  </li>
+</ul>
+
+<section [ngSwitch]="tab">
+  <ng-container *ngSwitchCase="'taken'">
+    <ng-container *ngIf="(workshops$ | async).length as workshops else empty">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let workshop of workshops">
+          <h4>{{ workshop.name }}</h4>
+          <p>{{ workshop.description }}</p>
+          <div class="actions">
+            <button class="btn" (click)="remove(workshop.id)">Remove</button>
+            <a [routerLink]="['/workshops', workshop.id, 'edit']" class="btn btn-info" >
+              Edit
+            </a>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #empty>
+      <article class="empty">
+        <h4>You have started no workshop yet</h4>
+      </article>
+    </ng-template>
   </ng-container>
-  <ng-template #registration>
-    <article>
-      <span>Register as Tutor to make your workshop public</span>
-      <button class="btn btn-info" (click)="register()">Register</button>
-    </article>
-  </ng-template>
 
-  <ul class="list-group">
-    <li class="list-group-item" *ngFor="let workshop of workshops$ | async">
-      <h4>{{ workshop.name }}</h4>
-      <p>{{ workshop.description }}</p>
-      <div class="actions">
-        <button class="btn" (click)="remove(workshop.id)">Remove</button>
-        <a [routerLink]="['/workshops', workshop.id, 'edit']" class="btn btn-info">
-          Edit
-        </a>
-      </div>
-    </li>
-  </ul>
+  <ng-container *ngSwitchCase="'create'">
+    <ng-container *ngIf="isTutor$ | async; else registration">
+      <article>
+        <span>You're registered as tutor</span>
+        <button class="btn btn-danger" (click)="unregister()">
+          Unregister
+        </button>
+      </article>
+    </ng-container>
+    <ng-template #registration>
+      <article>
+        <span>Register as Tutor to make your workshop public</span>
+        <button class="btn btn-info" (click)="register()">Register</button>
+      </article>
+    </ng-template>
+    <footer class="bg-light" *ngIf="!importMode; else importFooter">
+      <a class="btn btn-success" routerLink="/workshops/create">Create workshop</a>
+      <button class="btn" (click)="importMode = !importMode">
+        <span *ngIf="!importMode">Or Import from Github</span>
+        <span *ngIf="importMode">Cancel</span>
+      </button>
+    </footer>
+  </ng-container>
 </section>
-
-
-<footer class="bg-light" *ngIf="!importMode; else importFooter">
-  <a class="btn btn-success" routerLink="/workshops/create">Create workshop</a>
-  <button class="btn" (click)="importMode = !importMode">
-    <span *ngIf="!importMode">Or Import from Github</span>
-    <span *ngIf="importMode">Cancel</span>
-  </button>
-</footer>
 
 <!-- Form for importing workshops -->
 <ng-template #importFooter>
   <footer class="bg-light import-footer">
     <div class="form-group">
       <label>Link to Github Repository</label>
-      <input class="form-control" [formControl]="importForm"
-        placeholder="e.g.: https://github.com/ethereum/remix-ide" />
+      <input
+        class="form-control"
+        [formControl]="importForm"
+        placeholder="e.g.: https://github.com/ethereum/remix-ide"
+      />
     </div>
     <div class="actions">
       <button class="btn" (click)="importMode = false">Cancel</button>

@@ -1,32 +1,29 @@
-<ng-container *ngIf="workshops$ | async as workshops">
-  <header>
-    <h4>Workshops</h4>
-    <ng-container *ngIf="loggedIn$ | async; else loginAlert">
-      <button *ngIf="network === 'goerli'" class="btn" (click)="sync()">
-        Sync
-      </button>
-      <span *ngIf="network !== 'goerli'" class="text-danger">
-        You have to use <b>Goerli</b>
-      </span>
-    </ng-container>
-    <ng-template #loginAlert>
-      <span class="text-danger">You need to signin first</span>
-    </ng-template>
-  </header>
+<header class="bg-light">
+  <h4>Workshops</h4>
+</header>
 
-  <ul @slideIn class="list-group">
-    <li class="list-group-item" *ngFor="let workshop of workshops$ | async; trackBy: trackByFn">
-      <h4>{{ workshop.name }}</h4>
-      <p>{{ workshop.description }}</p>
-      <div class="actions">
-        <a [routerLink]="['/workshops', workshop.id]" class="btn">
-          Start
-        </a>
-      </div>
-    </li>
-  </ul>
-</ng-container>
+<div class="alert">
+  <ng-container *ngIf="loggedIn$ | async; else loginAlert">
+    <button *ngIf="network === 'goerli'" class="btn" (click)="sync()">
+      Sync
+    </button>
+    <span *ngIf="network !== 'goerli'" class="text-danger">
+      You have to use <b>Goerli</b>
+    </span>
+  </ng-container>
+  <ng-template #loginAlert>
+    <span class="text-danger">You need to signin first</span>
+  </ng-template>
+</div>
 
-<account-toolbar (loggedIn)="sync()">
-  <a routerLink="/account/profile">Profile</a>
-</account-toolbar>
+<ul @slideIn class="list-group" *ngIf="workshops$ | async as workshops">
+  <li class="list-group-item" *ngFor="let workshop of workshops$ | async; trackBy: trackByFn">
+    <h4>{{ workshop.name }}</h4>
+    <p>{{ workshop.description }}</p>
+    <div class="actions">
+      <a [routerLink]="['/workshops', workshop.id]" class="btn">
+        Start
+      </a>
+    </div>
+  </li>
+</ul>

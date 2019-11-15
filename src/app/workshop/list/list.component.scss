@@ -6,17 +6,11 @@
   overflow: hidden;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 15px;
-  box-shadow: 0 4px 5px -2px black;
-  z-index: 1;
 
-  h4 {
-    margin: 0;
-  }
+header, footer {
+  display: flex;
+  align-items: center;
+  padding: 10px 5px;
 }
 
 ul {

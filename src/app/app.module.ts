@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { AccountGuard } from './account/account.guard';
 import { GraphQLModule } from './graphql.module';
 import { ToasterComponent } from './notification/toaster/toaster.component';
+import { LoginModule } from './account/login/login.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ToasterComponent } from './notification/toaster/toaster.component';
     BootstrapModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    LoginModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'workshops', pathMatch: 'full' },
       {

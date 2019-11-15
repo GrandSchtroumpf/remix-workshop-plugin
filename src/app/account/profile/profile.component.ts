@@ -7,6 +7,8 @@ import { FormControl } from '@angular/forms';
 import { GithubService } from 'src/app/github.service';
 import { guid } from '@datorama/akita';
 
+type Tab = 'taken' | 'created' | 'create';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -18,6 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public isTutor$: Observable<boolean>;
   public importMode = false;
   public importForm = new FormControl('');
+  public tab: Tab = 'taken';
 
   constructor(
     private contract: RemixWorkshopContract,
