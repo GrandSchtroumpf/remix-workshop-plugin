@@ -16,8 +16,29 @@
 
 <section [ngSwitch]="tab">
   <ng-container *ngSwitchCase="'taken'">
-    <ng-container *ngIf="(workshops$ | async).length as workshops else empty">
-      <ul class="list-group">
+    <ng-container *ngIf="taken$ | async as workshops">
+      <ul class="list-group" *ngIf="workshops.length else empty">
+        <li class="list-group-item" *ngFor="let workshop of workshops">
+          <h4>{{ workshop.name }}</h4>
+          <p>{{ workshop.description }}</p>
+          <div class="actions">
+            <a [routerLink]="['/workshops', workshop.id, 'view']" class="btn btn-info" >
+              Resume
+            </a>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #empty>
+      <article class="empty">
+        <h4>You have started no workshop yet</h4>
+      </article>
+    </ng-template>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'created'">
+    <ng-container *ngIf="created$ | async as workshops else empty">
+      <ul class="list-group" *ngIf="workshops.length else empty">
         <li class="list-group-item" *ngFor="let workshop of workshops">
           <h4>{{ workshop.name }}</h4>
           <p>{{ workshop.description }}</p>
@@ -31,10 +52,10 @@
       </ul>
     </ng-container>
     <ng-template #empty>
-      <article class="empty">
-        <h4>You have started no workshop yet</h4>
-      </article>
-    </ng-template>
+        <article class="empty">
+          <h4>You have created no workshop yet</h4>
+        </article>
+      </ng-template>
   </ng-container>
 
   <ng-container *ngSwitchCase="'create'">
@@ -52,19 +73,19 @@
         <button class="btn btn-info" (click)="register()">Register</button>
       </article>
     </ng-template>
-    <footer class="bg-light" *ngIf="!importMode; else importFooter">
+    <article class="create" *ngIf="!importMode; else importFooter">
       <a class="btn btn-success" routerLink="/workshops/create">Create workshop</a>
       <button class="btn" (click)="importMode = !importMode">
         <span *ngIf="!importMode">Or Import from Github</span>
         <span *ngIf="importMode">Cancel</span>
       </button>
-    </footer>
+    </article>
   </ng-container>
 </section>
 
 <!-- Form for importing workshops -->
 <ng-template #importFooter>
-  <footer class="bg-light import-footer">
+  <article class="create import">
     <div class="form-group">
       <label>Link to Github Repository</label>
       <input
@@ -77,5 +98,5 @@
       <button class="btn" (click)="importMode = false">Cancel</button>
       <button class="btn btn-success" (click)="sync()">Import workshops</button>
     </div>
-  </footer>
+  </article>
 </ng-template>

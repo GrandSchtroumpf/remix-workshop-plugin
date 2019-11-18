@@ -5,7 +5,7 @@
   justify-content: space-between;
 }
 
-header, footer {
+header {
   display: flex;
   align-items: center;
   padding: 10px 5px;
@@ -29,6 +29,7 @@ section {
 
   .empty {
     color: rgba(0, 0, 0, 0.5);
+    text-align: center;
   }
 
   ul {
@@ -40,16 +41,18 @@ section {
   }
 }
 
-footer {
-  justify-content: space-between;
+.create {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 5px;
 
   a {
     margin: 0 5px;
   }
 }
 
-footer.import-footer {
-  flex-direction: column;
+.create.import {
   align-items: stretch;
 }
 

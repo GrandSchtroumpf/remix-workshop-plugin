@@ -20,7 +20,8 @@ export class WorkshopQuery extends QueryEntity<WorkshopState> {
   }
 
   steps$ = this.selectActive().pipe(map(workshop => workshop.steps));
-  owned$ = this.selectAll({ filterBy: entity => this.isOwned(entity) });
+  owned$ = this.selectAll({ filterBy: workshop => this.isOwned(workshop) });
+  taken$ = this.selectAll({ filterBy: workshop => this.isTaken(workshop) });
 
   get owned() {
     return this.getAll({ filterBy: entity => this.isOwned(entity) });
@@ -28,6 +29,10 @@ export class WorkshopQuery extends QueryEntity<WorkshopState> {
 
   private isOwned(workshop: Workshop): boolean {
     return workshop.author === this.accountQuery.address;
+  }
+
+  private isTaken(workshop: Workshop): boolean {
+    return !!this.accountQuery.getValue().progress[workshop.id];
   }
 
 }

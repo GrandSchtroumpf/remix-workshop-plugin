@@ -17,7 +17,7 @@ const zoom = style({
 
 export const slideInY = [
   slide,
-  animate(`400ms ${Easing.in}`)
+  animate(`400ms cubic-bezier(0.175, 0.885, 0.32, 1.275)`) // Cannot use const enum before Ivy
 ];
 export const slideOutY = animate(`400ms ${Easing.out}`, slide);
 export const zoomOut = animate(`400ms ${Easing.out}`, zoom);

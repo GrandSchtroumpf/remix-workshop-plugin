@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AccountQuery } from './account/+state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,7 @@ import { Component } from '@angular/core';
         <li class="nav-item">
           <a class="nav-link" routerLink="/workshops/list" routerLinkActive="active">Workshops</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="address$ | async">
           <a class="nav-link" routerLink="/account/profile" routerLinkActive="active">Activity</a>
         </li>
       </ul>
@@ -38,8 +40,16 @@ import { Component } from '@angular/core';
       padding: 0 20px 0 0;
       transition: font-size 0.3s ease-in-out;
     }
+    ul .nav-link.active {
+      color: var(--success);
+    }
   `]
 })
-export class AppComponent {
-  constructor() {}
+export class AppComponent implements OnInit {
+  public address$: Observable<string>;
+  constructor(private account: AccountQuery) {}
+
+  ngOnInit() {
+    this.address$ = this.account.select('address');
+  }
 }

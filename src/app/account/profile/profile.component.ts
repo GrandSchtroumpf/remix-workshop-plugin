@@ -16,7 +16,8 @@ type Tab = 'taken' | 'created' | 'create';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   public subscriptions: Subscription[];
-  public workshops$: Observable<Workshop[]>;
+  public taken$: Observable<Workshop[]>;
+  public created$: Observable<Workshop[]>;
   public isTutor$: Observable<boolean>;
   public importMode = false;
   public importForm = new FormControl('');
@@ -36,7 +37,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.contract.onUnregistration().subscribe(),
     ];
     this.workshopService.getOwned();  // Get values from 3box
-    this.workshops$ = this.workshopQuery.owned$;
+    this.taken$ = this.workshopQuery.taken$;
+    this.created$ = this.workshopQuery.owned$;
     this.isTutor$ = this.query.select('isTutor');
   }
 
